@@ -11,7 +11,12 @@ class notifications extends StatefulWidget {
 class _notificationsState extends State<notifications> {
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.green[500],
+        title: Text('notification'),
+      ),
+      body: Text('Review your recent driving experience'),
       
     );
   }

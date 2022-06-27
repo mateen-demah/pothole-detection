@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
+import 'package:g4app/pages/data_collection/collection_page.dart';
+import 'package:g4app/pages/data_collection/data_history.dart';
 
 void main() {
   runApp(MaterialApp(
-    splash: ,
-    login: ,
-    signup: ,
-    notifications: ,
-
+    title: "G4",
+    theme: ThemeData(
+      primarySwatch: Colors.green,
+    ),
+    home: Scaffold(
+      appBar: AppBar(title: Text("G4")),
+      body: DataHistoryPage(),
+    ),
   ));
 }
 

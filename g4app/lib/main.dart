@@ -3,16 +3,15 @@ import 'package:g4app/pages/data_collection/collection_page.dart';
 import 'package:g4app/pages/data_collection/data_history.dart';
 
 void main() {
-  runApp(MaterialApp(
-    title: "G4",
-    theme: ThemeData(
-      primarySwatch: Colors.green,
+  runApp(
+    MaterialApp(
+      title: "G4",
+      theme: ThemeData(
+        primarySwatch: Colors.green,
+      ),
+      home: DataHistoryPage(),
     ),
-    home: Scaffold(
-      appBar: AppBar(title: Text("G4")),
-      body: DataHistoryPage(),
-    ),
-  ));
+  );
 }
 
 // class MyApp extends StatelessWidget {

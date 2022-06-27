@@ -68,19 +68,21 @@ class SensorDataDb {
     return id;
   }
 
-  Future<bool> deleteSession(int session_id) async {
+  Future<List<int>> deleteSession(String session_id) async {
     final db = await instance.database;
-    final rowsDeleted = await db!.delete(
+    final deletedRaw = await db!.delete(
       'rawSensorData',
       where: 'session_id = ?',
       whereArgs: [session_id],
     );
-    db.delete(
+    final deletedPotholes = await db.delete(
       'potholes',
       where: 'session_id = ?',
       whereArgs: [session_id],
     );
-    return rowsDeleted >= 1;
+    final deletedSession = await db.delete('sessionInfo',
+        where: 'session_id = ?', whereArgs: [session_id]);
+    return [deletedRaw, deletedPotholes, deletedSession];
   }
 
   Future<List<Map<String, Object?>>> readAllSessionInfo() async {

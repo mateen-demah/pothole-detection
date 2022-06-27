@@ -9,15 +9,22 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import './database.dart';
 
 class CollectionPage extends StatefulWidget {
+  final sessionID;
+  final sessionMode;
+
+  const CollectionPage(
+      {Key? key, required this.sessionID, required this.sessionMode})
+      : super(key: key);
+
   @override
   State<CollectionPage> createState() => _CollectionPageState();
 }
 
 class _CollectionPageState extends State<CollectionPage> {
   String? mode;
-  TextEditingController sessionNameController = TextEditingController();
+  // TextEditingController sessionNameController = TextEditingController();
   bool sessionStarted = false;
-  bool sessionNamed = false;
+  // bool sessionNamed = false;
   int? logTime;
   int startTime = DateTime.now().millisecondsSinceEpoch;
   double? gpsLat, gpsLong;
@@ -40,247 +47,212 @@ class _CollectionPageState extends State<CollectionPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Row(
-          children: [
-            Text("session ID: "),
-            Container(
-              width: MediaQuery.of(context).size.width - 100,
-              child: TextField(
-                readOnly: sessionStarted,
-                controller: sessionNameController,
-                decoration: InputDecoration(
-                  hintText: "give this session a name",
-                ),
-                onChanged: (newName) => sessionNamed = newName != '',
-                onSubmitted: (_) => setState(() {}),
-              ),
-            ),
-          ],
+    return WillPopScope(
+      onWillPop: () async {
+        timer!.cancel();
+        return false;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text("sensor data collection"),
         ),
-        Container(
-            margin: EdgeInsets.all(8.0),
-            // color: Colors.greenAccent,
-            height: MediaQuery.of(context).size.height * 0.5,
-            width: double.infinity,
-            child: Column(
-              children: [
-                Expanded(
-                  child: Container(
-                    child: SfCartesianChart(
-                      series: <CartesianSeries>[
-                        SplineSeries<AccPlotData, double>(
-                          name: "acc_X",
-                          dataSource: accPlotData,
-                          xValueMapper: (AccPlotData acc, _) =>
-                              double.parse(acc.time.toString()),
-                          yValueMapper: (AccPlotData acc, _) =>
-                              double.parse(acc.accValues[0].toString()),
-                          color: Colors.red,
-                          onRendererCreated:
-                              (ChartSeriesController controller) {
-                            accXController = controller;
-                          },
-                        ),
-                        SplineSeries<AccPlotData, double>(
-                          name: "acc_Y",
-                          dataSource: accPlotData,
-                          xValueMapper: (AccPlotData acc, _) =>
-                              double.parse(acc.time.toString()),
-                          yValueMapper: (AccPlotData acc, _) =>
-                              double.parse(acc.accValues[1].toString()),
-                          color: Colors.yellow,
-                          onRendererCreated:
-                              (ChartSeriesController controller) {
-                            accYController = controller;
-                          },
-                        ),
-                        SplineSeries<AccPlotData, double>(
-                          name: "acc_Z",
-                          dataSource: accPlotData,
-                          xValueMapper: (AccPlotData acc, _) =>
-                              double.parse(acc.time.toString()),
-                          yValueMapper: (AccPlotData acc, _) =>
-                              double.parse(acc.accValues[2].toString()),
-                          color: Colors.green,
-                          onRendererCreated:
-                              (ChartSeriesController controller) {
-                            accZController = controller;
-                          },
-                        ),
-                      ],
-                      primaryXAxis: NumericAxis(
-                        majorGridLines: const MajorGridLines(width: 0),
-                        edgeLabelPlacement: EdgeLabelPlacement.shift,
-                        // interval: 2,
-                        title: AxisTitle(text: 'Time (seconds)'),
-                      ),
-                      primaryYAxis: NumericAxis(
-                        axisLine: const AxisLine(width: 0),
-                        majorTickLines: const MajorTickLines(size: 0),
-                        title: AxisTitle(text: 'Accelerometer'),
-                        interval: 1,
-                      ),
-                      legend: Legend(
-                        isVisible: true,
-                        position: LegendPosition.top,
-                      ),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Container(
-                    child: SfCartesianChart(
-                      series: <CartesianSeries>[
-                        SplineSeries<GyroPlotData, double>(
-                          name: "gyro_X",
-                          dataSource: gyroPlotData,
-                          xValueMapper: (GyroPlotData gyro, _) =>
-                              double.parse(gyro.time.toString()),
-                          yValueMapper: (GyroPlotData gyro, _) =>
-                              double.parse(gyro.gyroValues[0].toString()),
-                          color: Colors.red,
-                          onRendererCreated:
-                              (ChartSeriesController controller) {
-                            gyroXController = controller;
-                          },
-                        ),
-                        SplineSeries<GyroPlotData, double>(
-                          name: "gyro_Y",
-                          dataSource: gyroPlotData,
-                          xValueMapper: (GyroPlotData gyro, _) =>
-                              double.parse(gyro.time.toString()),
-                          yValueMapper: (GyroPlotData gyro, _) =>
-                              double.parse(gyro.gyroValues[1].toString()),
-                          color: Colors.yellow,
-                          onRendererCreated:
-                              (ChartSeriesController controller) {
-                            gyroYController = controller;
-                          },
-                        ),
-                        SplineSeries<GyroPlotData, double>(
-                          name: "gyro_Z",
-                          dataSource: gyroPlotData,
-                          xValueMapper: (GyroPlotData gyro, _) =>
-                              double.parse(gyro.time.toString()),
-                          yValueMapper: (GyroPlotData gyro, _) =>
-                              double.parse(gyro.gyroValues[2].toString()),
-                          color: Colors.green,
-                          onRendererCreated:
-                              (ChartSeriesController controller) {
-                            gyroZController = controller;
-                          },
-                        ),
-                      ],
-                      primaryXAxis: NumericAxis(
-                        majorGridLines: const MajorGridLines(width: 0),
-                        edgeLabelPlacement: EdgeLabelPlacement.shift,
-                        // interval: 2,
-                        title: AxisTitle(text: 'Time (seconds)'),
-                      ),
-                      primaryYAxis: NumericAxis(
-                        axisLine: const AxisLine(width: 0),
-                        majorTickLines: const MajorTickLines(size: 0),
-                        title: AxisTitle(text: 'Gyroscope'),
-                        interval: 1,
-                      ),
-                      legend: Legend(
-                        isVisible: true,
-                        position: LegendPosition.top,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            )
-            // Column(
-            //   mainAxisAlignment: MainAxisAlignment.center,
-            //   crossAxisAlignment: CrossAxisAlignment.start,
-            //   children: [
-            //     Text('number:  $datapointsCollected'),
-            //     SizedBox(height: 20),
-            //     Text('Time:    $logTime'),
-            //     SizedBox(height: 20),
-            //     Text("LONG:    $gpsLong"),
-            //     Text("LAT:     $gpsLat"),
-            //     SizedBox(height: 20),
-            //     Text('ACC_X:   ${accValues[0]}'),
-            //     Text('ACC_Y:   ${accValues[1]}'),
-            //     Text('ACC_Z:   ${accValues[2]}'),
-            //     SizedBox(height: 20),
-            //     Text('GYRO_X:  ${gyroValues[0]}'),
-            //     Text('GYRO_Y:  ${gyroValues[1]}'),
-            //     Text('GYRO_Z:  ${gyroValues[2]}'),
-            //   ],
-            // ),
-            ),
-        DropdownButton(
-          value: mode,
-          iconEnabledColor: Colors.red,
-          items: [
-            DropdownMenuItem(
-              value: "pothole",
-              child: Text('pothole detection'),
-            ),
-            DropdownMenuItem(
-              value: "segement",
-              child: Text("segment classification"),
-            )
-          ],
-          onChanged: (dynamic selected_mode) {
-            setState(() {
-              mode = selected_mode;
-            });
-          },
-          hint: Text("select operation mode"),
-        ),
-        Expanded(
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              if (mode == null)
-                Container()
-              else
-                Row(
-                  children: mode == 'pothole'
-                      ? [
-                          ElevatedButton(
-                            onPressed: sessionStarted ? () {} : null,
-                            child: Text("Register pothole"),
-                          )
-                        ]
-                      : [
-                          ElevatedButton(
-                              onPressed: sessionStarted ? () {} : null,
-                              child: Text("Good")),
-                          ElevatedButton(
-                              onPressed: sessionStarted ? () {} : null,
-                              child: Text("Fair")),
-                          ElevatedButton(
-                              onPressed: sessionStarted ? () {} : null,
-                              child: Text("Good")),
-                        ],
-                ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  ElevatedButton(
-                    onPressed: sessionNamed && mode != null
-                        ? startDataCollection
-                        : null,
-                    child: Text('Start'),
-                  ),
-                  ElevatedButton(
-                    onPressed: sessionStarted ? stopDataCollection : null,
-                    child: Text('Stop'),
-                  ),
+                  Text("session ID: "),
+                  Text(widget.sessionID),
                 ],
-              )
+              ),
+              Row(
+                children: [
+                  Text("session Mode: "),
+                  Text(widget.sessionMode),
+                ],
+              ),
+              Container(
+                margin: EdgeInsets.all(8.0),
+                // color: Colors.greenAccent,
+                height: MediaQuery.of(context).size.height * 0.5,
+                width: double.infinity,
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        child: SfCartesianChart(
+                          series: <CartesianSeries>[
+                            SplineSeries<AccPlotData, double>(
+                              name: "acc_X",
+                              dataSource: accPlotData,
+                              xValueMapper: (AccPlotData acc, _) =>
+                                  double.parse(acc.time.toString()),
+                              yValueMapper: (AccPlotData acc, _) =>
+                                  double.parse(acc.accValues[0].toString()),
+                              color: Colors.red,
+                              onRendererCreated:
+                                  (ChartSeriesController controller) {
+                                accXController = controller;
+                              },
+                            ),
+                            SplineSeries<AccPlotData, double>(
+                              name: "acc_Y",
+                              dataSource: accPlotData,
+                              xValueMapper: (AccPlotData acc, _) =>
+                                  double.parse(acc.time.toString()),
+                              yValueMapper: (AccPlotData acc, _) =>
+                                  double.parse(acc.accValues[1].toString()),
+                              color: Colors.yellow,
+                              onRendererCreated:
+                                  (ChartSeriesController controller) {
+                                accYController = controller;
+                              },
+                            ),
+                            SplineSeries<AccPlotData, double>(
+                              name: "acc_Z",
+                              dataSource: accPlotData,
+                              xValueMapper: (AccPlotData acc, _) =>
+                                  double.parse(acc.time.toString()),
+                              yValueMapper: (AccPlotData acc, _) =>
+                                  double.parse(acc.accValues[2].toString()),
+                              color: Colors.green,
+                              onRendererCreated:
+                                  (ChartSeriesController controller) {
+                                accZController = controller;
+                              },
+                            ),
+                          ],
+                          primaryXAxis: NumericAxis(
+                            majorGridLines: const MajorGridLines(width: 0),
+                            edgeLabelPlacement: EdgeLabelPlacement.shift,
+                            // interval: 2,
+                            title: AxisTitle(text: 'Time (seconds)'),
+                          ),
+                          primaryYAxis: NumericAxis(
+                            axisLine: const AxisLine(width: 0),
+                            majorTickLines: const MajorTickLines(size: 0),
+                            title: AxisTitle(text: 'Accelerometer'),
+                            interval: 1,
+                          ),
+                          legend: Legend(
+                            isVisible: true,
+                            position: LegendPosition.top,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Container(
+                        child: SfCartesianChart(
+                          series: <CartesianSeries>[
+                            SplineSeries<GyroPlotData, double>(
+                              name: "gyro_X",
+                              dataSource: gyroPlotData,
+                              xValueMapper: (GyroPlotData gyro, _) =>
+                                  double.parse(gyro.time.toString()),
+                              yValueMapper: (GyroPlotData gyro, _) =>
+                                  double.parse(gyro.gyroValues[0].toString()),
+                              color: Colors.red,
+                              onRendererCreated:
+                                  (ChartSeriesController controller) {
+                                gyroXController = controller;
+                              },
+                            ),
+                            SplineSeries<GyroPlotData, double>(
+                              name: "gyro_Y",
+                              dataSource: gyroPlotData,
+                              xValueMapper: (GyroPlotData gyro, _) =>
+                                  double.parse(gyro.time.toString()),
+                              yValueMapper: (GyroPlotData gyro, _) =>
+                                  double.parse(gyro.gyroValues[1].toString()),
+                              color: Colors.yellow,
+                              onRendererCreated:
+                                  (ChartSeriesController controller) {
+                                gyroYController = controller;
+                              },
+                            ),
+                            SplineSeries<GyroPlotData, double>(
+                              name: "gyro_Z",
+                              dataSource: gyroPlotData,
+                              xValueMapper: (GyroPlotData gyro, _) =>
+                                  double.parse(gyro.time.toString()),
+                              yValueMapper: (GyroPlotData gyro, _) =>
+                                  double.parse(gyro.gyroValues[2].toString()),
+                              color: Colors.green,
+                              onRendererCreated:
+                                  (ChartSeriesController controller) {
+                                gyroZController = controller;
+                              },
+                            ),
+                          ],
+                          primaryXAxis: NumericAxis(
+                            majorGridLines: const MajorGridLines(width: 0),
+                            edgeLabelPlacement: EdgeLabelPlacement.shift,
+                            // interval: 2,
+                            title: AxisTitle(text: 'Time (seconds)'),
+                          ),
+                          primaryYAxis: NumericAxis(
+                            axisLine: const AxisLine(width: 0),
+                            majorTickLines: const MajorTickLines(size: 0),
+                            title: AxisTitle(text: 'Gyroscope'),
+                            interval: 1,
+                          ),
+                          legend: Legend(
+                            isVisible: true,
+                            position: LegendPosition.top,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    // GridView(gridDelegate: gridDelegate)
+                    Row(
+                      children: mode == 'pothole'
+                          ? [
+                              ElevatedButton(
+                                onPressed: sessionStarted ? () {} : null,
+                                child: Text("Register pothole"),
+                              )
+                            ]
+                          : [
+                              ElevatedButton(
+                                  onPressed: sessionStarted ? () {} : null,
+                                  child: Text("Good")),
+                              ElevatedButton(
+                                  onPressed: sessionStarted ? () {} : null,
+                                  child: Text("Fair")),
+                              ElevatedButton(
+                                  onPressed: sessionStarted ? () {} : null,
+                                  child: Text("Good")),
+                            ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        ElevatedButton(
+                          onPressed: startDataCollection,
+                          child: Text('Start'),
+                        ),
+                        ElevatedButton(
+                          onPressed: sessionStarted ? stopDataCollection : null,
+                          child: Text('Stop'),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
             ],
           ),
         ),
-      ],
+      ),
     );
   }
 
@@ -308,10 +280,6 @@ class _CollectionPageState extends State<CollectionPage> {
     }
 
     _locationData = await location.getLocation();
-    // print('============================');
-    // print(_locationData.latitude);
-    // print(_locationData.longitude);
-    // print('==============================');
     gpsLat = _locationData.latitude;
     gpsLong = _locationData.longitude;
   }
@@ -332,7 +300,7 @@ class _CollectionPageState extends State<CollectionPage> {
         'gyroscope_x': gyroValues[0],
         'gyroscope_y': gyroValues[1],
         'gyroscope_z': gyroValues[2],
-        'session_id': sessionNameController.text,
+        'session_id': widget.sessionID,
       });
       print('======================================');
       print(dataSaved);
@@ -428,15 +396,10 @@ class _CollectionPageState extends State<CollectionPage> {
   void startDataCollection() {
     sessionStarted = true;
     startTime = DateTime.now().millisecondsSinceEpoch;
-    timer = Timer.periodic(Duration(milliseconds: 200), (_) => getDataPoint());
+    // timer = Timer.periodic(Duration(milliseconds: 200), (_) => getDataPoint());
     setState(() {});
-    print('============            =============');
-    print('NOTE: stuff after setstate would run');
-    var id = SensorDataDb.instance
-        .insert('sessionInfo', {'session_Id': sessionNameController.text});
-
-    print('id for saving session ======================================');
-    print(id);
+    SensorDataDb.instance
+        .insert('sessionInfo', {'session_Id': widget.sessionID});
   }
 
   void stopDataCollection() {

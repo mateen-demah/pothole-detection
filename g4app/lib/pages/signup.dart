@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/button_builder.dart';
+import 'package:flutter_signin_button/flutter_signin_button.dart';
 
 
 class signup extends StatefulWidget {
@@ -19,16 +20,16 @@ class _signupState extends State<signup> {
         child: SafeArea(child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              child: Image.asset('assets/logo.png',
-                      height: 100,
-                      width: 100,
-              ),
-
-            ),
+            
             Container(
               child:Text('Create account'),
             ),
+            Container(
+              child:Text('Enter your details to get started',
+                      style: TextStyle(color: Colors.grey)
+              ),
+
+            ),
             Container(child: TextField(
                   decoration: InputDecoration(
                     icon: Icon(Icons.person),
@@ -61,6 +62,15 @@ class _signupState extends State<signup> {
                     icon: Icon(Icons.person),
                     hintText: "email",
                      border:InputBorder.none
+                  ),
+      
+                ),
+              ),
+              Container(child: TextField(
+                  decoration: InputDecoration(
+                    icon: Icon(Icons.person),
+                    hintText: "email",
+                    //  border:InputBorder.none
                   ),
       
                 ),
@@ -69,12 +79,26 @@ class _signupState extends State<signup> {
             
             Container(
               child: TextButton(onPressed: () {
-                Navigator.pushReplacementNamed(context, '/notifications'); 
+                 
               }, 
                       child:Text('Sign Up'),
             ),
+            
 
             ),
+            TextButton(
+                style: TextButton.styleFrom(
+                    padding: const EdgeInsets.all(16.0),
+                    primary: Colors.white,
+                    backgroundColor: Color(0xFF76FF03),
+                    textStyle: const TextStyle(fontSize: 20),
+                  ),
+                child:const Text('Sign Up'),
+                onPressed: () {
+                  Navigator.pushReplacementNamed(context, '/notifications');
+                  
+                  },
+                ),      
             Container(
                child: SignInButtonBuilder(
                 icon: Icons.facebook,
@@ -84,6 +108,12 @@ class _signupState extends State<signup> {
                
               ),
             ),
+            SignInButton(
+              Buttons.Google,
+              text: 'continue with google',
+             onPressed: () {}
+             ),      
+            
             Container(
                child: SignInButtonBuilder(
                 icon: Icons.facebook,

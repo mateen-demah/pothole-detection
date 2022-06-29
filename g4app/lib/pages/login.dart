@@ -19,54 +19,100 @@ class _loginState extends State<login> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(
-                child: Image.asset('assets/logo.png',
-                height: 100,
-                width: 100,),
+              Container(child:Align(
+                alignment: Alignment.centerLeft,
+                child: Text('Sign in',
+                  style: TextStyle(fontWeight:FontWeight.bold,fontSize:28,)
+                  ),
+              )
               ),
-              SizedBox(height:16),
-              Container(child:Text('Login',
-                style: TextStyle(fontWeight:FontWeight.bold),
+              SizedBox(height: 5,),
+              Container(
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text('Enter your details to continue',
+                  ),
                 )
               ),
-              Container(child: TextField(
-                  decoration: InputDecoration(
-                    icon: Icon(Icons.person),
-                    hintText: "email",
-                    //  border:InputBorder.none
+              SizedBox(height: 20,),
+              Container(
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text('Email:',
                   ),
+                )
+              ),
+              SizedBox(height: 5,),
+              Container(  
+                child: TextField(
+                  decoration: InputDecoration(
+                    border:OutlineInputBorder(borderRadius: BorderRadius.circular(15.0),),
+                    filled: true,
+                    // icon: Icon(Icons.person),
+                    hintText: "Please enter your email", 
+                    fillColor: Colors.grey[200], 
+                                   
+                  ),
+                  
       
                 ),
               ),
+              SizedBox(height: 5,),
+              Container(
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text('Email:',
+                  ),
+                )
+              ),
+               SizedBox(height: 10,),
               Container(child: TextField(
                   decoration: InputDecoration(
-                    icon: Icon(Icons.lock),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(15.0),),
+                    filled: true,
+                    // icon: Icon(Icons.lock),
                     suffixIcon: Icon(Icons.visibility,
-                                // color: Colors.green,
                     ),
-                    hintText: "password",
-                    // border:InputBorder.none
+                    hintText: "Please enter your password",
+                    fillColor: Colors.grey[200],
                   ),
       
                 ),
               ),
               SizedBox(height: 10,),
               Container(
-                child: TextButton(
-                  child: Text('Login'),
-                  onPressed: () {
-                    
-                  },
+                child: GestureDetector(
+                    onTap: () {},
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: Text('Forget password?',
+                            style: TextStyle(color: Colors.green,
+                            fontWeight: FontWeight.bold,decoration:TextDecoration.underline,
+                            
+                            )
+                      ),
+                    ),
                   ),
-              ),             
-              Container(
-                child:SignInButtonBuilder(
-                    icon: Icons.facebook,
-                    text: "Continue with google",
-                    onPressed: () {},
-                    backgroundColor: Colors.green,
-                  ) ,
               ),
+              SizedBox(height: 10,),
+              TextButton(
+                style: TextButton.styleFrom(
+                    padding: const EdgeInsets.all(16.0),
+                    primary: Colors.white,
+                    backgroundColor: Color(0xFF4CAF50),
+                    textStyle: const TextStyle(fontSize: 20),
+                  ),
+                child:const Text('Login'),
+                onPressed: () {
+                  
+                  },
+                ), 
+                SizedBox(height: 10,), 
+                SignInButton(
+                        Buttons.Google,
+                        text: 'continue with google',
+                      onPressed: () {}
+                ),               
               Container(
                 child:SignInButtonBuilder(
                     text: "Continue with facebook",

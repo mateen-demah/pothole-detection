@@ -8,6 +8,8 @@ import 'package:g4app/pages/splash.dart';
 
 void main() {
   runApp(MaterialApp(  
+    theme: ThemeData(
+scaffoldBackgroundColor: Colors.white),
     // home: splash(),
     initialRoute: '/login',
     routes: {

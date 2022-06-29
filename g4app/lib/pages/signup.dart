@@ -14,7 +14,6 @@ class _signupState extends State<signup> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey,
       body: Padding(
         padding: const EdgeInsets.fromLTRB(6.0, 3.0, 6.0, 0.0 ),
         child: SafeArea(child: Column(
@@ -22,75 +21,106 @@ class _signupState extends State<signup> {
           children: [
             
             Container(
-              child:Text('Create account'),
+              child:Align(
+                alignment: Alignment.centerLeft,
+                child: Text('Create account',
+                style: TextStyle(fontWeight: FontWeight.bold,fontSize:28),)),
             ),
             Container(
-              child:Text('Enter your details to get started',
-                      style: TextStyle(color: Colors.grey)
+              child:Align(
+                alignment: Alignment.centerLeft,
+                child: Text('Enter your details to get started',
+                ),
+              ),
+
+            ),
+            SizedBox(height: 20,),
+            Container(
+              margin: EdgeInsets.all(4),
+              child:Align(
+                alignment: Alignment.centerLeft,
+                child: Text('First Name',
+                         style: TextStyle()
+                ),
               ),
 
             ),
             Container(child: TextField(
                   decoration: InputDecoration(
-                    icon: Icon(Icons.person),
-                    hintText: "email",
-                     border:InputBorder.none
+                    filled: true,
+                    border:OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                     hintText: "Please enter your first name",
+                     fillColor: Colors.grey[200],
                   ),
       
                 ),
+            ),
+            Container(
+              margin: EdgeInsets.all(4),
+              child:Align(
+                alignment: Alignment.centerLeft,
+                child: Text('Last Name',
+                ),
+              ),
+
+            ),
+             Container(child: TextField(
+                  decoration: InputDecoration(
+                    filled: true,
+                    border:OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                     hintText: "Please enter your Last name",
+                     fillColor: Colors.grey[200],
+                  ),
+      
+                ),
+            ),
+            Container(
+              margin: EdgeInsets.all(4),
+              child:Align(
+                alignment: Alignment.centerLeft,
+                child: Text('Email',
+                ),
+              ),
+
+            ),
+             Container(child: TextField(
+                  decoration: InputDecoration(
+                    filled: true,
+                    border:OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                     hintText: "Please enter your email",
+                     fillColor: Colors.grey[200],
+                  ),
+      
+                ),
+            ),
+            Container(
+              margin: EdgeInsets.all(4),
+              child:Align(
+                alignment: Alignment.centerLeft,
+                child: Text('Password',
+                ),
+              ),
+
             ),
             Container(child: TextField(
                   decoration: InputDecoration(
-                    icon: Icon(Icons.person),
-                    hintText: "email",
-                     border:InputBorder.none
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(15.0),),
+                    filled: true,
+                    // icon: Icon(Icons.lock),
+                    suffixIcon: Icon(Icons.visibility,
+                    ),
+                    hintText: "Please enter your password",
+                    fillColor: Colors.grey[200],
                   ),
       
                 ),
               ),
-               Container(child: TextField(
-                  decoration: InputDecoration(
-                    icon: Icon(Icons.person),
-                    hintText: "email",
-                     border:InputBorder.none
-                  ),
-      
-                ),
-              ),
-               Container(child: TextField(
-                  decoration: InputDecoration(
-                    icon: Icon(Icons.person),
-                    hintText: "email",
-                     border:InputBorder.none
-                  ),
-      
-                ),
-              ),
-              Container(child: TextField(
-                  decoration: InputDecoration(
-                    icon: Icon(Icons.person),
-                    hintText: "email",
-                    //  border:InputBorder.none
-                  ),
-      
-                ),
-              ),
-           
-            
-            Container(
-              child: TextButton(onPressed: () {
-                 
-              }, 
-                      child:Text('Sign Up'),
-            ),
-            
-
-            ),
+              SizedBox(height: 10,),                    
             TextButton(
                 style: TextButton.styleFrom(
                     padding: const EdgeInsets.all(16.0),
                     primary: Colors.white,
-                    backgroundColor: Color(0xFF76FF03),
+                    backgroundColor: Color(0xFF4CAF50),
                     textStyle: const TextStyle(fontSize: 20),
                   ),
                 child:const Text('Sign Up'),
@@ -99,15 +129,6 @@ class _signupState extends State<signup> {
                   
                   },
                 ),      
-            Container(
-               child: SignInButtonBuilder(
-                icon: Icons.facebook,
-                backgroundColor: Colors.green,
-                onPressed: () {},
-                text: "continue with facebook"
-               
-              ),
-            ),
             SignInButton(
               Buttons.Google,
               text: 'continue with google',

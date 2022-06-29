@@ -61,7 +61,7 @@ class _loginState extends State<login> {
               Container(
                 child: Align(
                   alignment: Alignment.centerLeft,
-                  child: Text('Email:',
+                  child: Text('Password:',
                   ),
                 )
               ),

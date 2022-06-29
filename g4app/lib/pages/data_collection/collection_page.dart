@@ -21,7 +21,7 @@ class CollectionPage extends StatefulWidget {
 }
 
 class _CollectionPageState extends State<CollectionPage> {
-  String? mode;
+  // String? mode;
   // TextEditingController sessionNameController = TextEditingController();
   bool sessionStarted = false;
   // bool sessionNamed = false;
@@ -210,41 +210,51 @@ class _CollectionPageState extends State<CollectionPage> {
               ),
               Expanded(
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     // GridView(gridDelegate: gridDelegate)
-                    Row(
-                      children: mode == 'pothole'
-                          ? [
-                              ElevatedButton(
-                                onPressed: sessionStarted ? () {} : null,
-                                child: Text("Register pothole"),
-                              )
-                            ]
-                          : [
-                              ElevatedButton(
+                    Container(
+                      height: MediaQuery.of(context).size.height * 0.2,
+                      child: Row(
+                        children: widget.sessionMode == 'potholes'
+                            ? [
+                                button(
+                                  text: "register pothole",
                                   onPressed: sessionStarted ? () {} : null,
-                                  child: Text("Good")),
-                              ElevatedButton(
+                                )
+                              ]
+                            : [
+                                button(
                                   onPressed: sessionStarted ? () {} : null,
-                                  child: Text("Fair")),
-                              ElevatedButton(
+                                  text: "Good",
+                                ),
+                                button(
                                   onPressed: sessionStarted ? () {} : null,
-                                  child: Text("Good")),
-                            ],
+                                  text: "Fair",
+                                ),
+                                button(
+                                  onPressed: sessionStarted ? () {} : null,
+                                  text: "Good",
+                                ),
+                              ],
+                      ),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        ElevatedButton(
-                          onPressed: startDataCollection,
-                          child: Text('Start'),
-                        ),
-                        ElevatedButton(
-                          onPressed: sessionStarted ? stopDataCollection : null,
-                          child: Text('Stop'),
-                        ),
-                      ],
+                    Container(
+                      height: MediaQuery.of(context).size.height * 0.02,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          button(
+                            onPressed: startDataCollection,
+                            text: 'Start',
+                          ),
+                          button(
+                            onPressed:
+                                sessionStarted ? stopDataCollection : null,
+                            text: 'Stop',
+                          ),
+                        ],
+                      ),
                     )
                   ],
                 ),
@@ -406,6 +416,15 @@ class _CollectionPageState extends State<CollectionPage> {
     sessionStarted = false;
     timer!.cancel();
     setState(() {});
+  }
+
+  Widget button({String? text, Function? onPressed}) {
+    return SizedBox.expand(
+      child: ElevatedButton(
+        onPressed: () => onPressed,
+        child: Text(text!),
+      ),
+    );
   }
 }
 

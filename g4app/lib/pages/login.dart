@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
+import 'package:g4app/services/auth.dart';
 // import 'package:http/http.dart';
-
 class login extends StatefulWidget {
   const login({ Key? key }) : super(key: key);
 
@@ -10,6 +10,15 @@ class login extends StatefulWidget {
 }
 
 class _loginState extends State<login> {
+
+  final Authservices _auth = Authservices();
+
+  // Textfield state
+  String email = "";
+  var password = "";
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,7 +62,12 @@ class _loginState extends State<login> {
                     fillColor: Colors.grey[200], 
                                    
                   ),
-                  
+                  onChanged: (value) {
+                    setState(() {
+                      email = value;
+                    });
+                    
+                  },
       
                 ),
               ),
@@ -70,12 +84,18 @@ class _loginState extends State<login> {
                   decoration: InputDecoration(
                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(15.0),),
                     filled: true,
-                    // icon: Icon(Icons.lock),
                     suffixIcon: Icon(Icons.visibility,
                     ),
                     hintText: "Please enter your password",
                     fillColor: Colors.grey[200],
                   ),
+                  obscureText: true,
+                  onChanged: (value) {
+                    setState(() {
+                      password = value;
+                    });
+                    
+                  },
       
                 ),
               ),
@@ -103,7 +123,21 @@ class _loginState extends State<login> {
                     textStyle: const TextStyle(fontSize: 20),
                   ),
                 child:const Text('Login'),
-                onPressed: () {
+                onPressed: () async{
+                  dynamic result = await _auth.signInAnon();
+                  if (result == null){
+                    print("error signing in ");
+                  } else {
+                    print("signed in");
+                    print(result.uid);
+                  }
+                  //signin with email and password
+                  // dynamic result =await _auth.signinWithEmailAndPassword(email, password);
+                  // if (result == null){
+                  //   print("error signing in ");
+                  // } else {
+                  //   print("signed in");
+                  // }
                   
                   },
                 ), 

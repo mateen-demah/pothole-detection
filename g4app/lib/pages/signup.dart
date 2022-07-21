@@ -23,6 +23,7 @@ class _signupState extends State<signup> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       body: Padding(
         padding: const EdgeInsets.fromLTRB(6.0, 3.0, 6.0, 0.0 ),
         child: SafeArea(child: Form(
@@ -30,7 +31,6 @@ class _signupState extends State<signup> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              
               Container(
                 child:Align(
                   alignment: Alignment.centerLeft,
@@ -197,7 +197,7 @@ class _signupState extends State<signup> {
                     Text("Already have an account ? "
                     ),
                     GestureDetector(
-                      onTap: () {},
+                      onTap: ()=>Navigator.pushNamed(context, '/login'),
                       child: Text('Sign in',
                             style: TextStyle(color: Colors.green,
                             fontWeight: FontWeight.bold)

@@ -163,7 +163,7 @@ class _loginState extends State<login> {
                   Text("Don't have an account ? "
                   ),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: ()=>handleSignUp(context),
                     child: Text('Sign Up',
                           style: TextStyle(color: Colors.green,
                           fontWeight: FontWeight.bold)
@@ -180,5 +180,8 @@ class _loginState extends State<login> {
       ),
       
     );
+  }
+  void handleSignUp(BuildContext context){
+    Navigator.pushNamed(context, '/signup');
   }
 }

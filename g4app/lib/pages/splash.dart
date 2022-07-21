@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:g4app/pages/login.dart';
+import 'package:g4app/wrapper.dart';
 // import 'package:http/http.dart';
 
 class splash extends StatefulWidget {
@@ -20,7 +21,7 @@ class _splashState extends State<splash> {
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => login(),
+              builder: (context) => Wrapper(),
             ));
       },
     );

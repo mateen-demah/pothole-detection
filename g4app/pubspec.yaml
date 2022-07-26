@@ -29,6 +29,11 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   http: ^0.13.3
+  flutter_signin_button: ^2.0.0
+  firebase_auth: ^3.3.8
+  cloud_firestore: ^3.1.9
+  firebase_core: ^1.19.1
+  provider: ^6.0.3
 
 dev_dependencies:
   flutter_test:
@@ -46,8 +51,8 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-assets:
-  - assets/
+  assets:
+    - assets/logo.png
   
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

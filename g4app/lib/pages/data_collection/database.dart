@@ -36,12 +36,20 @@ class SensorDataDb {
       gyroscope_x REAL NOT NULL,
       gyroscope_y REAL NOT NULL,
       gyroscope_z REAL NOT NULL,
+      moving_speed REAL NOT NULL,
+      moving_speed_accuracy REAL NOT NULL,
       session_id TEXT NOT NULL,
       is_exported INTEGER DEFAULT 0
       )''');
 
     // schema for registered potholes
     await db.execute('''CREATE TABLE potholes (
+      timestamp INTEGER PRIMARY KEY,
+      session_id TEXT NOT NULL,
+      is_exported INTEGER DEFAULT 0
+    )''');
+
+    await db.execute('''CREATE TABLE ramps (
       timestamp INTEGER PRIMARY KEY,
       session_id TEXT NOT NULL,
       is_exported INTEGER DEFAULT 0
@@ -55,8 +63,16 @@ class SensorDataDb {
       date INTEGER
     )''');
 
+    // schema road class labelling data
+    await db.execute('''CREATE TABLE rawRoadSegmentLabel(
+      timestamp INTEGER PRIMARY KEY,
+      session_id TEXT NOT NULL,
+      is_exported INTEGER DEFAULT 0,
+      category TEXT NOT NULL
+    )''');
+
     // TODO: create a schema for extracted features table
-    // TODO: create a schema road class labelling data
+    // TODO: create schema for model output
   }
 
   Future<int> insert(String tableName, Map<String, Object> sensorData) async {
@@ -80,15 +96,22 @@ class SensorDataDb {
       where: 'session_id = ?',
       whereArgs: [session_id],
     );
+    final deletedRamps = await db.delete(
+      'ramps',
+      where: 'session_id = ?',
+      whereArgs: [session_id],
+    );
     final deletedSession = await db.delete('sessionInfo',
         where: 'session_id = ?', whereArgs: [session_id]);
+    print(
+        "$deletedRaw ===========\n$deletedPotholes =================\n$deletedSession =========================");
     return [deletedRaw, deletedPotholes, deletedSession];
   }
 
   Future<List<Map<String, Object?>>> readAllSessionInfo() async {
     final db = await instance.database;
     final sessionInfoList = await db!.query("sessionInfo", orderBy: "date");
-    return sessionInfoList;
+    return sessionInfoList.toList();
   }
 
   Future<void> close() async {

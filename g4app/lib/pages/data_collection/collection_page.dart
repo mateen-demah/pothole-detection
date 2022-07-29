@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math' as math;
 
 import 'package:sensors_plus/sensors_plus.dart';
 import 'package:flutter/material.dart';
@@ -24,10 +23,10 @@ class _CollectionPageState extends State<CollectionPage> {
   // String? mode;
   // TextEditingController sessionNameController = TextEditingController();
   bool sessionStarted = false;
-  // bool sessionNamed = false;
+  bool sessionSuccess = false;
   int? logTime;
   int startTime = DateTime.now().millisecondsSinceEpoch;
-  double? gpsLat, gpsLong;
+  double? gpsLat, gpsLong, speed, speedAccuracy;
   int datapointsCollected = 0;
   final accValues = List.filled(3, 0.0);
   final gyroValues = List.filled(3, 0.0);
@@ -47,16 +46,59 @@ class _CollectionPageState extends State<CollectionPage> {
 
   @override
   Widget build(BuildContext context) {
+    var screenSize = MediaQuery.of(context).size;
+    var sessionWasSuccessful = sessionSuccess && !sessionStarted;
     return WillPopScope(
       onWillPop: () async {
+        if (sessionStarted && !sessionSuccess) {
+          final response = await showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text('Data collection in progress'),
+              content: Text("collected data would be lost if you leave"),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop('stay'),
+                  child: Text("stay"),
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Colors.green),
+                    foregroundColor: MaterialStateProperty.all(Colors.white),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop('save and leave'),
+                  child: Text("save and leave"),
+                  style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all(Colors.greenAccent),
+                    foregroundColor: MaterialStateProperty.all(Colors.white),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop('leave'),
+                  child: Text("leave"),
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Colors.red),
+                    foregroundColor: MaterialStateProperty.all(Colors.white),
+                  ),
+                ),
+              ],
+            ),
+          );
+          if (response == 'stay') return false;
+          if (response == 'leave') sessionWasSuccessful = false;
+          if (response == 'save and leave') sessionWasSuccessful = true;
+        }
         timer!.cancel();
-        return false;
+        Navigator.of(context).pop<bool>(sessionWasSuccessful);
+        return true;
       },
       child: Scaffold(
         appBar: AppBar(
           title: Text("sensor data collection"),
         ),
-        body: Padding(
+        body: Container(
+          // width: screenSize.width - 16,
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
@@ -73,9 +115,9 @@ class _CollectionPageState extends State<CollectionPage> {
                 ],
               ),
               Container(
-                margin: EdgeInsets.all(8.0),
+                margin: EdgeInsets.symmetric(vertical: 8),
                 // color: Colors.greenAccent,
-                height: MediaQuery.of(context).size.height * 0.5,
+                height: screenSize.height * 0.5,
                 width: double.infinity,
                 child: Column(
                   children: [
@@ -124,6 +166,7 @@ class _CollectionPageState extends State<CollectionPage> {
                             ),
                           ],
                           primaryXAxis: NumericAxis(
+                            isVisible: sessionStarted,
                             majorGridLines: const MajorGridLines(width: 0),
                             edgeLabelPlacement: EdgeLabelPlacement.shift,
                             // interval: 2,
@@ -187,6 +230,7 @@ class _CollectionPageState extends State<CollectionPage> {
                             ),
                           ],
                           primaryXAxis: NumericAxis(
+                            isVisible: sessionStarted,
                             majorGridLines: const MajorGridLines(width: 0),
                             edgeLabelPlacement: EdgeLabelPlacement.shift,
                             // interval: 2,
@@ -210,51 +254,63 @@ class _CollectionPageState extends State<CollectionPage> {
               ),
               Expanded(
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     // GridView(gridDelegate: gridDelegate)
-                    Container(
-                      height: MediaQuery.of(context).size.height * 0.2,
-                      child: Row(
-                        children: widget.sessionMode == 'potholes'
-                            ? [
-                                button(
-                                  text: "register pothole",
-                                  onPressed: sessionStarted ? () {} : null,
-                                )
-                              ]
-                            : [
-                                button(
-                                  onPressed: sessionStarted ? () {} : null,
-                                  text: "Good",
-                                ),
-                                button(
-                                  onPressed: sessionStarted ? () {} : null,
-                                  text: "Fair",
-                                ),
-                                button(
-                                  onPressed: sessionStarted ? () {} : null,
-                                  text: "Good",
-                                ),
-                              ],
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: widget.sessionMode == 'potholes'
+                          ? [
+                              Button(
+                                text: "register speed ramp",
+                                onPressed: registerRamp,
+                                enabled: sessionStarted,
+                                screenSize: screenSize,
+                              ),
+                              Button(
+                                text: "register pothole",
+                                onPressed: registerPothole,
+                                enabled: sessionStarted,
+                                screenSize: screenSize,
+                              )
+                            ]
+                          : [
+                              Button(
+                                onPressed: () {},
+                                text: "Good",
+                                enabled: sessionStarted,
+                                screenSize: screenSize,
+                              ),
+                              Button(
+                                enabled: sessionStarted,
+                                onPressed: () {},
+                                text: "Fair",
+                                screenSize: screenSize,
+                              ),
+                              Button(
+                                enabled: sessionStarted,
+                                onPressed: () {},
+                                text: "Good",
+                                screenSize: screenSize,
+                              ),
+                            ],
                     ),
-                    Container(
-                      height: MediaQuery.of(context).size.height * 0.02,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          button(
-                            onPressed: startDataCollection,
-                            text: 'Start',
-                          ),
-                          button(
-                            onPressed:
-                                sessionStarted ? stopDataCollection : null,
-                            text: 'Stop',
-                          ),
-                        ],
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Button(
+                          onPressed: startDataCollection,
+                          text: 'Start',
+                          enabled: !sessionStarted,
+                          screenSize: screenSize,
+                        ),
+                        Button(
+                          onPressed: stopDataCollection,
+                          text: 'Stop',
+                          enabled: sessionStarted,
+                          screenSize: screenSize,
+                        ),
+                      ],
                     )
                   ],
                 ),
@@ -292,6 +348,8 @@ class _CollectionPageState extends State<CollectionPage> {
     _locationData = await location.getLocation();
     gpsLat = _locationData.latitude;
     gpsLong = _locationData.longitude;
+    speed = _locationData.speed;
+    speedAccuracy = _locationData.speedAccuracy;
   }
 
   Future<void> getDataPoint() async {
@@ -310,6 +368,8 @@ class _CollectionPageState extends State<CollectionPage> {
         'gyroscope_x': gyroValues[0],
         'gyroscope_y': gyroValues[1],
         'gyroscope_z': gyroValues[2],
+        'moving_speed': speed!,
+        'moving_speed_accuracy': speedAccuracy!,
         'session_id': widget.sessionID,
       });
       print('======================================');
@@ -348,6 +408,22 @@ class _CollectionPageState extends State<CollectionPage> {
     return value.abs() > 0.2 ? value : 0;
   }
 
+  Future<void> registerPothole() async {
+    print('<^^^^^^^^^^^^^^^^^^^^^^^');
+    print(await SensorDataDb.instance.insert('potholes', {
+      'timestamp': logTime!,
+      'session_id': widget.sessionID,
+    }));
+  }
+
+  Future<void> registerRamp() async {
+    print('<^^^^^^^^^^^^^^^^^^^^^^^');
+    print(await SensorDataDb.instance.insert('ramps', {
+      'timestamp': logTime!,
+      'session_id': widget.sessionID,
+    }));
+  }
+
   List<AccPlotData> getAccData() {
     return [
       AccPlotData([0, 0, 1], 0),
@@ -367,16 +443,16 @@ class _CollectionPageState extends State<CollectionPage> {
   List<GyroPlotData> getGyroData() {
     return [
       GyroPlotData([0, 0, 1], 0),
-      GyroPlotData([0, 0, 2], 0.2),
-      GyroPlotData([0, 0, 3], 0.4),
-      GyroPlotData([0, 0, 4], 0.6),
-      GyroPlotData([0, 0, 5], 0.8),
-      GyroPlotData([0, 0, 4], 1),
-      GyroPlotData([0, 0, 3], 1.2),
-      GyroPlotData([0, 0, 2], 1.4),
-      GyroPlotData([0, 0, 1], 1.6),
-      GyroPlotData([0, 0, 3], 1.8),
-      GyroPlotData([0, 0, 2], 2),
+      GyroPlotData([0, 0, 2], 0),
+      GyroPlotData([0, 0, 3], 0),
+      GyroPlotData([0, 0, 4], 0),
+      GyroPlotData([0, 0, 5], 0),
+      GyroPlotData([0, 0, 4], 0),
+      GyroPlotData([0, 0, 3], 0),
+      GyroPlotData([0, 0, 2], 0),
+      GyroPlotData([0, 0, 1], 0),
+      GyroPlotData([0, 0, 3], 0),
+      GyroPlotData([0, 0, 2], 0),
     ];
   }
 
@@ -404,6 +480,7 @@ class _CollectionPageState extends State<CollectionPage> {
   }
 
   void startDataCollection() {
+    print('session started ==============================');
     sessionStarted = true;
     startTime = DateTime.now().millisecondsSinceEpoch;
     // timer = Timer.periodic(Duration(milliseconds: 200), (_) => getDataPoint());
@@ -414,18 +491,19 @@ class _CollectionPageState extends State<CollectionPage> {
 
   void stopDataCollection() {
     sessionStarted = false;
+    sessionSuccess = true;
     timer!.cancel();
     setState(() {});
+    Navigator.of(context).pop<bool>(true);
   }
 
-  Widget button({String? text, Function? onPressed}) {
-    return SizedBox.expand(
-      child: ElevatedButton(
-        onPressed: () => onPressed,
-        child: Text(text!),
-      ),
-    );
-  }
+  // Widget button({
+  //   @required String? text,
+  //   @required Function? onPressed,
+  // }) {
+  //   final enabled = text == "Start" || sessionStarted;
+  //   return
+  // }
 }
 
 class AccPlotData {
@@ -440,4 +518,32 @@ class GyroPlotData {
   final double time;
 
   GyroPlotData(this.gyroValues, this.time);
+}
+
+class Button extends StatelessWidget {
+  final text;
+  final onPressed;
+  final enabled;
+  final screenSize;
+
+  const Button(
+      {Key? key,
+      required this.text,
+      required this.onPressed,
+      required this.enabled,
+      required this.screenSize})
+      : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Container(
+        margin: EdgeInsets.all(3),
+        height: screenSize.height * 0.1,
+        child: ElevatedButton(
+          onPressed: enabled ? onPressed : null,
+          child: Text(text!),
+        ),
+      ),
+    );
+  }
 }

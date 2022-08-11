@@ -1,4 +1,3 @@
-
 from typing import List
 from statistics import pstdev
 
@@ -16,7 +15,7 @@ class RawDataPoint:
         self.speed_accuracy = data_row[10]
          
 class ExtractedDataPoint:
-    def __init__(self, raw_datapoints:List[RawDataPoint]) -> None:
+    def __init__(self, raw_datapoints:List[RawDataPoint], phole) -> None:
         accelerometer_x_values = tuple(map(lambda x: x.accelerometer_x, raw_datapoints))
         accelerometer_y_values = tuple(map(lambda x: x.accelerometer_y, raw_datapoints))
         accelerometer_z_values = tuple(map(lambda x: x.accelerometer_z, raw_datapoints))
@@ -28,7 +27,9 @@ class ExtractedDataPoint:
         self.timestamp = raw_datapoints[-1].timestamp
         self.latitude = raw_datapoints[2].latitue
         self.longitude = raw_datapoints[2].longitude
-        self.label = 0
+        if phole != "empty" and (self.timestamp - 400) <= phole <= (self.timestamp+400): self.label = 1
+        else: self.label = 0
+        self.phole_success = bool(self.label)
         
         self.avg_acc_x = sum(accelerometer_x_values)/5
         self.avg_acc_y = sum(accelerometer_y_values)/5
@@ -77,3 +78,15 @@ class ExtractedDataPoint:
                 self.min_gyro_x, self.min_gyro_y, self.min_gyro_z,
                 self.min_speed,
                 self.label)
+        
+class PotholeData:
+    def __init__(self, session_id) -> None:
+        self.potholes_file = open('./data/raw/' + session_id + "_potholes.csv", 'r', encoding='utf-8', newline='')
+        self.potholes_file.readline() # skip headers
+        # self.phole = self.next_phole
+        
+    def next_phole(self):
+        return next(self.potholes_file, "empty").split(',')[0]
+    
+    def close_file(self):
+        self.potholes_file.close()

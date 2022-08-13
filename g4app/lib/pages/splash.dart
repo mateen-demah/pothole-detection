@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:g4app/onboardwrapper.dart';
 import 'package:g4app/wrapper.dart';
 // import 'package:http/http.dart';
 
@@ -20,7 +21,7 @@ class _splashState extends State<splash> {
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => Wrapper(),
+              builder: (context) => onboardWrapper(),
             ));
       },
     );

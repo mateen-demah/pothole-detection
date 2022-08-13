@@ -25,8 +25,8 @@ class _loginState extends State<login> {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(6.0, 3.0, 6.0, 0.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+          child: ListView(
+            // mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(child:Align(
                 alignment: Alignment.centerLeft,
@@ -128,6 +128,7 @@ class _loginState extends State<login> {
                   if (result == null){
                     print("error signing in ");
                   } else {
+                    Navigator.pushReplacementNamed(context, 'home');
                     print("signed in");
                     print(result.uid);
                   }

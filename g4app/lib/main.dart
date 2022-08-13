@@ -3,7 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:g4app/pages/login.dart';
+import 'package:g4app/pages/main_map.dart';
 import 'package:g4app/pages/notifications.dart';
+import 'package:g4app/pages/onboarding.dart';
 import 'package:g4app/pages/signup.dart';
 import 'package:g4app/pages/splash.dart';
 import 'package:g4app/services/auth.dart';
@@ -21,12 +23,15 @@ void main() async {
     initialData: null,
     child: MaterialApp(
       theme: ThemeData(scaffoldBackgroundColor: Colors.white),
+      debugShowCheckedModeBanner: false,
       // home: splash(),
       routes: {
         '/': (context) => splash(),
         '/login': (context) => login(),
         '/signup': (context) => signup(),
-        '/notification': (context) => notifications(),
+        '/notification': (context) => Notifications(),
+        'onboard':(context) => OnBoarding(),
+        'home':(context) => MainMapPage()
       },
     ),
   ));

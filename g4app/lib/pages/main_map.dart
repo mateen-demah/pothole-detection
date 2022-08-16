@@ -7,6 +7,7 @@ import 'dart:ffi';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:g4app/pages/notifications.dart';
 import 'package:g4app/pages/search_screen.dart';
 import 'package:g4app/pages/signup.dart';
@@ -47,7 +48,6 @@ class _MainMapPageState extends State<MainMapPage>
 
   List<Polyline> polylines = [];
   List<LatLng> polylineCoordinates = [];
-  // PolylinePoints polylinePoints = PolylinePoints();
   String googleAPiKey = "AIzaSyAFUP5gFZRz6nfScFF3R5tNpcT2LRyr0i4";
 
   void _onMapCreated(GoogleMapController _cntrl) {
@@ -62,18 +62,22 @@ class _MainMapPageState extends State<MainMapPage>
   }
 
   fetchPolyline() {
+    setState(() {
+      loading = true;
+    });
     FirebaseFirestore.instance.collection('Potholes').get().then((document) {
       if (document.docs.isNotEmpty) {
         for (int i = 0; i < document.docs.length - 1; ++i) {
           calcDistance(document.docs[i].data(), document.docs[i + 1].data());
         }
-        setState(() {});
+        setState(() {
+          loading = false;
+        });
       }
     });
   }
 
   calcDistance(Map<String, dynamic> data1, Map<String, dynamic> data2) {
-    // log((data1['location'] as GeoPoint).);
     final geoPoint1 = data1["location"] as GeoPoint;
     final geoPoint2 = data2["location"] as GeoPoint;
 
@@ -87,36 +91,14 @@ class _MainMapPageState extends State<MainMapPage>
     _getPolyline(geoPoint1, geoPoint2, data1['groupId'], distanceInMeters);
   }
 
-  // _addPolyLine() {
-  //   PolylineId id = PolylineId("poly");
-  //   Polyline polyline = Polyline(
-  //       polylineId: id, color: Colors.red, points: polylineCoordinates);
-  //   polylines[id] = polyline;
-  //   setState(() {});
-  // }
-
   _getPolyline(geoPoint1, geoPooint2, id, dist) {
-    // PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-    //     googleAPiKey,
-    //     PointLatLng(origin.latitude, origin.longitude),
-    //     PointLatLng(destination.latitude, destination.longitude),
-    //     travelMode: TravelMode.driving,
-    //     wayPoints: [PolylineWayPoint(location: "Sabo, Yaba Lagos Nigeria")]);
-    // if (result.points.isNotEmpty) {
-    //   result.points.forEach((PointLatLng point) {
-    //     polylineCoordinates.add(LatLng(point.latitude, point.longitude));
-    //   });
-    // }
-
-    // polylinesCoordinates.add(LatLng(origin))
-
     late Color color;
     if (dist < 50) {
       color = Colors.red;
-    } else if (100 > dist && dist < 200) {
+    } else if (50 > dist && dist < 200) {
       color = Colors.yellow;
     } else {
-      color = Colors.green;
+      color = Color.fromARGB(255, 76, 175, 80);
     }
 
     polylines.add(
@@ -131,19 +113,25 @@ class _MainMapPageState extends State<MainMapPage>
       ),
     );
 
-    log(polylines.toString());
-
-    // _addPolyLine();
   }
+
+  // trying out new approach
+
+
+
+
+
+  // end of new approach trial
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      log("docu");
       fetchPolyline();
     });
   }
+
+  bool loading = true;
 
   @override
   Widget build(BuildContext context) {
@@ -269,14 +257,15 @@ class _MainMapPageState extends State<MainMapPage>
         body: Stack(
           children: [
             /// Map
+
             Builder(builder: (context) {
-              log(Set<Polyline>.of(polylines).toString());
+              if (loading) return Center(child: CircularProgressIndicator());
               return GoogleMap(
                 padding: EdgeInsets.only(bottom: bottomPaddingOfMap),
                 mapType: MapType.normal,
                 myLocationButtonEnabled: true,
                 initialCameraPosition: _kGooglePlex,
-                myLocationEnabled: false,
+                myLocationEnabled: true,
                 zoomGesturesEnabled: true,
                 zoomControlsEnabled: true,
                 onMapCreated: _onMapCreated,
@@ -291,8 +280,8 @@ class _MainMapPageState extends State<MainMapPage>
               left: 10.0,
               child: GestureDetector(
                 onTap: () {
-                  // scaffoldKey.currentState!.openDrawer();
-                  fetchPolyline(); //TODO: revert to normal function.
+                  scaffoldKey.currentState!.openDrawer();
+                  // fetchPolyline(); //TODO: revert to normal function.
                 },
                 child: Container(
                   decoration: BoxDecoration(

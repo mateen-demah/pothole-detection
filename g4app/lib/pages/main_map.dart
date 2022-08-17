@@ -61,6 +61,43 @@ class _MainMapPageState extends State<MainMapPage>
     });
   }
 
+
+    // MARKERS
+  Map<MarkerId, Marker> _markers = <MarkerId, Marker>{};
+
+  // @override
+  // void initState() {
+  //   fetchPotholes();
+  //   super.initState();
+  // }
+  
+
+  fetchPotholes() async {
+    var potholes = await FirebaseFirestore.instance.collection('Potholes').get();
+    if (potholes.docs.isNotEmpty) {
+      for(int i = 0; i < potholes.docs.length; i++){
+        var markerIdVal = potholes.docs[i].id;
+        final MarkerId markerId = MarkerId(markerIdVal);
+        final Marker marker = Marker(
+          markerId: markerId,
+          position: LatLng(potholes.docs[i].data()['location'].latitude, potholes.docs[i].data()['location'].longitude),
+          infoWindow: InfoWindow(title: "hi", snippet: potholes.docs[i].data()['groupId']),
+          // icon: Icon(Icons.ac_unit_outlined),
+          icon: BitmapDescriptor.defaultMarker,
+        );
+        setState(() {
+          _markers[markerId] = marker;
+        });
+      }
+    }
+  }
+
+  // END OF MARKERS
+
+
+
+
+
   fetchPolyline() {
     setState(() {
       loading = true;

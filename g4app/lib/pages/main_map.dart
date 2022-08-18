@@ -38,7 +38,6 @@ class _MainMapPageState extends State<MainMapPage>
   double bottomPaddingOfMap = 0.0;
 
   static final CameraPosition _kGooglePlex = CameraPosition(
-    // target: LatLng(37.42796133580664, -122.085749655962),
     target: LatLng(6.673159, -1.565402),
     zoom: 14.4746,
   );
@@ -46,86 +45,130 @@ class _MainMapPageState extends State<MainMapPage>
   late final GoogleMapController _controller;
   final _locatiion = Location();
 
-  List<Polyline> polylines = [];
+  Map<MarkerId, Marker> _markers = <MarkerId, Marker>{};
+  late BitmapDescriptor _markerIcon;
+  List<Polyline> tempPolylines = [];
+  List<Polyline>? polylines = null;
   List<LatLng> polylineCoordinates = [];
+  PolylinePoints polylinePoints = PolylinePoints();
   String googleAPiKey = "AIzaSyAFUP5gFZRz6nfScFF3R5tNpcT2LRyr0i4";
 
-  void _onMapCreated(GoogleMapController _cntrl) {
+  void _onMapCreated(GoogleMapController _cntrl)async {
     _controller = _cntrl;
-    _locatiion.onLocationChanged.listen((l) {
-      _controller.animateCamera(
-        CameraUpdate.newCameraPosition(
-          CameraPosition(target: LatLng(l.latitude!, l.longitude!), zoom: 15),
-        ),
-      );
-    });
+     LocationData locData = await _locatiion.getLocation();
+    _controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
+        target: LatLng(locData.latitude!, locData.longitude!), zoom: 18)));
   }
 
   fetchPolyline() {
     setState(() {
       loading = true;
     });
-    FirebaseFirestore.instance.collection('Potholes').get().then((document) {
+    FirebaseFirestore.instance
+        .collection('Potholes')
+        .get()
+        .then((document) async {
       if (document.docs.isNotEmpty) {
         for (int i = 0; i < document.docs.length - 1; ++i) {
-          calcDistance(document.docs[i].data(), document.docs[i + 1].data());
+          final geoPoint1 = document.docs[i].data()["location"] as GeoPoint;
+          final geoPoint2 = document.docs[i + 1].data()["location"] as GeoPoint;
+          String id = document.docs[i].id;
+          double dist = calcDistance(geoPoint1, geoPoint2);
+          fetchPotholes(document.docs[i]);
+          List<LatLng> latLngsBetweenRange = await _getPolyline(
+              geoPoint1.latitude,
+              geoPoint1.longitude,
+              geoPoint2.latitude,
+              geoPoint2.longitude,
+              id,
+              dist);
+
+          addpolyline(id, dist, latLngsBetweenRange);
         }
         setState(() {
+          polylines = tempPolylines;
           loading = false;
         });
       }
     });
   }
 
-  calcDistance(Map<String, dynamic> data1, Map<String, dynamic> data2) {
-    final geoPoint1 = data1["location"] as GeoPoint;
-    final geoPoint2 = data2["location"] as GeoPoint;
-
-    double distanceInMeters = Geolocator.distanceBetween(
-      geoPoint1.latitude,
-      geoPoint1.longitude,
-      geoPoint2.latitude,
-      geoPoint2.longitude,
+  // add markers function
+  fetchPotholes(pothole) {
+    var markerIdVal = pothole.id;
+    final MarkerId markerId = MarkerId(markerIdVal);
+    final Marker marker = Marker(
+      markerId: markerId,
+      position: LatLng(pothole.data()['location'].latitude,
+          pothole.data()['location'].longitude),
+      infoWindow: InfoWindow(title: "Pothole", snippet: pothole.data()['groupId']),
+      icon: BitmapDescriptor.defaultMarker,
     );
-
-    _getPolyline(geoPoint1, geoPoint2, data1['groupId'], distanceInMeters);
+    setState(() {
+      _markers[markerId] = marker;
+    });
   }
 
-  _getPolyline(geoPoint1, geoPooint2, id, dist) {
+  void _setMarkerIcon() async {
+    // TODO: add a dot image into your assets
+    _markerIcon = await BitmapDescriptor.fromAssetImage(
+        ImageConfiguration(), 'assets/adddotimage.png');
+  }
+
+  double calcDistance(geoPoint1, geoPoint2) {
+    double distanceInMeters = Geolocator.distanceBetween(geoPoint1.latitude,geoPoint1.longitude,geoPoint2.latitude,geoPoint2.longitude,);
+
+    return distanceInMeters;
+  }
+  //todo: this function get the lat longs between the range.
+  Future<List<LatLng>> _getPolyline(double geoPoint1latitude,double geoPoint1longitude,double geoPoint2latitude,double geoPoint2longitude,id,dist)
+  async {
+    List<LatLng> rangeLatLngs = [];
+    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+      googleAPiKey,
+      PointLatLng(geoPoint1latitude, geoPoint1longitude),
+      PointLatLng(geoPoint2latitude, geoPoint2longitude),
+      travelMode: TravelMode.driving,
+    );
+    if (result.points.isNotEmpty) {
+      for (PointLatLng point in result.points) {
+        rangeLatLngs.add(LatLng(point.latitude, point.longitude));
+      }
+      return rangeLatLngs;
+    } else {
+      return [];
+    }
+    // await addpolyline(id, dist);
+    // setPolyline();
+  }
+
+  setPolyline() {
+    polylines = tempPolylines;
+    setState(() {});
+  }
+
+  addpolyline(id, dist, List<LatLng> range) {
     late Color color;
-    if (dist < 50) {
+    if (dist <= 50) {
       color = Colors.red;
-    } else if (50 > dist && dist < 200) {
+    } else if (dist > 50 && dist < 100) {
       color = Colors.yellow;
     } else {
-      color = Color.fromARGB(255, 76, 175, 80);
+      color = Colors.lightGreen;
     }
 
-    polylines.add(
+    tempPolylines.add(
       Polyline(
         polylineId: PolylineId(id),
         color: color,
-        width: 3,
-        points: [
-          LatLng(geoPoint1.latitude, geoPoint1.longitude),
-          LatLng(geoPooint2.latitude, geoPooint2.longitude)
-        ],
+        points: range,
       ),
     );
-
   }
-
-  // trying out new approach
-
-
-
-
-
-  // end of new approach trial
-
   @override
   void initState() {
     super.initState();
+    _setMarkerIcon();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       fetchPolyline();
     });
@@ -269,7 +312,8 @@ class _MainMapPageState extends State<MainMapPage>
                 zoomGesturesEnabled: true,
                 zoomControlsEnabled: true,
                 onMapCreated: _onMapCreated,
-                polylines: Set<Polyline>.of(polylines),
+                markers: Set<Marker>.of(_markers.values),
+                polylines:Set<Polyline>.of(polylines == null ? [] : polylines!),
               );
             }),
 
@@ -281,7 +325,6 @@ class _MainMapPageState extends State<MainMapPage>
               child: GestureDetector(
                 onTap: () {
                   scaffoldKey.currentState!.openDrawer();
-                  // fetchPolyline(); //TODO: revert to normal function.
                 },
                 child: Container(
                   decoration: BoxDecoration(
@@ -291,7 +334,7 @@ class _MainMapPageState extends State<MainMapPage>
                       boxShadow: [
                         BoxShadow(
                           color: Colors.black,
-                          blurRadius: 6.0,
+                          blurRadius: 5.0,
                           spreadRadius: 0.5,
                           offset: Offset(0.7, 0.7),
                         )
@@ -327,9 +370,9 @@ class _MainMapPageState extends State<MainMapPage>
                       // ignore: prefer_const_literals_to_create_immutables
                       boxShadow: [
                         BoxShadow(
-                          color: Color.fromARGB(255, 177, 199, 238),
-                          blurRadius: 6.0,
-                          spreadRadius: 0.9,
+                          color: Colors.black,
+                          blurRadius: 5.0,
+                          spreadRadius: 0.5,
                           offset: Offset(0.1, 0.1),
                         )
                       ]),
@@ -337,8 +380,7 @@ class _MainMapPageState extends State<MainMapPage>
                     backgroundColor: Colors.white,
                     child: Icon(
                       Icons.search,
-                      color: Colors.blueAccent,
-                      // color: Colors.black,
+                      color: Colors.black,
                     ),
                     radius: 20.0,
                   ),

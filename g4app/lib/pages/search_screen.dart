@@ -69,7 +69,7 @@ class _SearchScreenState extends State<SearchScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            SizedBox(height: 15,),
+            const SizedBox(height: 15,),
             Row(mainAxisAlignment: MainAxisAlignment.start,
               children: const [
                 BackButton(),

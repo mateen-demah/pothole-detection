@@ -7,7 +7,7 @@
 
    <application
         android:label="g4app"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/launcher_icon">
 
         <!-- Adding google maps api -->
         <meta-data 

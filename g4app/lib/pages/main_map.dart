@@ -17,6 +17,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_place/src/details/details_result.dart';
 import 'package:location/location.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class MainMapPage extends StatefulWidget {
   const MainMapPage({Key? key, this.startPosition, this.endPosition})
@@ -102,7 +103,9 @@ class _MainMapPageState extends State<MainMapPage>
       position: LatLng(pothole.data()['location'].latitude,
           pothole.data()['location'].longitude),
       infoWindow: InfoWindow(title: "Pothole", snippet: pothole.data()['groupId']),
-      icon: BitmapDescriptor.defaultMarker,
+      // icon: BitmapDescriptor.defaultMarker,
+      // using created bitmapIcon
+      icon:_markerIcon,
     );
     setState(() {
       _markers[markerId] = marker;
@@ -112,7 +115,7 @@ class _MainMapPageState extends State<MainMapPage>
   void _setMarkerIcon() async {
     // TODO: add a dot image into your assets
     _markerIcon = await BitmapDescriptor.fromAssetImage(
-        ImageConfiguration(), 'assets/adddotimage.png');
+        ImageConfiguration(), 'assets/holes.png');
   }
 
   double calcDistance(geoPoint1, geoPoint2) {
@@ -142,6 +145,7 @@ class _MainMapPageState extends State<MainMapPage>
     // setPolyline();
   }
 
+  // this is never used
   setPolyline() {
     polylines = tempPolylines;
     setState(() {});

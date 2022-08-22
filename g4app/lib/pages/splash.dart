@@ -1,6 +1,11 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:g4app/onboardwrapper.dart';
+import 'package:g4app/pages/login.dart';
+import 'package:g4app/pages/onboarding.dart';
 import 'package:g4app/wrapper.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:http/http.dart';
 
 class splash extends StatefulWidget {
@@ -11,17 +16,22 @@ class splash extends StatefulWidget {
 }
 
 class _splashState extends State<splash> {
+  bool? initScreen;
   @override
   void initState() {
     //after 3 seconds load login page
     super.initState();
+    wrapperOnboardinit();
+    // whereAreWeGoing = wapperfunction
     Future.delayed(
-      const Duration(seconds: 3),
+      const Duration(milliseconds: 3000),
       () {
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => onboardWrapper(),
+              builder: (context) {
+                  return initScreen == null|| initScreen==false ? OnBoarding() : Wrapper();
+                  }
             ));
       },
     );
@@ -75,5 +85,13 @@ class _splashState extends State<splash> {
         ),
       ),
     );
+  }
+
+  Future<bool?> wrapperOnboardinit() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    initScreen = preferences.getBool('initScreen');
+    log(initScreen.toString());
+    await preferences.setBool('initScreen', true);
+    return initScreen;
   }
 }

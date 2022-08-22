@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 import 'dart:async';
 import 'dart:developer';
-import 'dart:ffi';
 
 // import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -115,7 +114,7 @@ class _MainMapPageState extends State<MainMapPage>
   void _setMarkerIcon() async {
     // TODO: add a dot image into your assets
     _markerIcon = await BitmapDescriptor.fromAssetImage(
-        ImageConfiguration(), 'assets/holes.png');
+        ImageConfiguration(), 'assets/pnew.png');
   }
 
   double calcDistance(geoPoint1, geoPoint2) {

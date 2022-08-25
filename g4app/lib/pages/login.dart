@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
+import 'package:g4app/pages/forgetPassword.dart';
 import 'package:g4app/services/auth.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -17,6 +18,7 @@ class _loginState extends State<login> {
   // Textfield state
   String email = "";
   var password = "";
+  String googleerrorMessage="";
 
   @override
   Widget build(BuildContext context) {
@@ -127,7 +129,9 @@ class _loginState extends State<login> {
                 ),
                 Container(
                   child: GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => ForgetPassword(),));
+                    },
                     child: Align(
                       alignment: Alignment.centerRight,
                       child: Text('Forget password?',
@@ -187,7 +191,7 @@ class _loginState extends State<login> {
                 // SignInButton(Buttons.Google,
                 //     text: 'continue with google',
                 //     onPressed: () {}),
-
+                Text(googleerrorMessage,),
                 Container(
                   width: 250,
                   height: 40,
@@ -198,14 +202,19 @@ class _loginState extends State<login> {
                       style: TextButton.styleFrom(
                         padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
                         primary: Colors.white,
-                        backgroundColor: Color(0xFF4CAF50),
+                        backgroundColor: Colors.red,
                         textStyle: const TextStyle(fontSize: 16),
                       ),
                       label: Text("continue with google",),
                       // todo:add google icon
                       icon:SvgPicture.asset('assets/Vector.svg',width: 23,),
                       // icon: Icons.facebook,
-                      onPressed: () {},
+                      onPressed: () {
+                        _auth.signInWithGoogle().then((value)=>Navigator.pushReplacementNamed(context, 'home')).catchError((enError){print(enError.toString());
+                        setState(() {
+                          googleerrorMessage='Could not sign in with google...Retry';
+                        });});
+                      },
                       // backgroundColor: Color.fromARGB(255, 98, 177, 101),
                     ),
                   ),
@@ -217,6 +226,7 @@ class _loginState extends State<login> {
                 Container(
                   width: 250,
                   height: 40,
+                  // decoration: OutlinedBorder(),
                   
                   child: Material(
                     elevation: 2,
@@ -224,7 +234,7 @@ class _loginState extends State<login> {
                       style: TextButton.styleFrom(
                         padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
                         primary: Colors.white,
-                        backgroundColor: Color(0xFF4CAF50),
+                        backgroundColor: Colors.blue,
                         textStyle: const TextStyle(fontSize: 16),
                       ),
                       icon: Icon(Icons.facebook),
@@ -262,4 +272,7 @@ class _loginState extends State<login> {
   void handleSignUp(BuildContext context) {
     Navigator.pushNamed(context, '/signup');
   }
+  // void googlepush(BuildContext context){
+    
+  // }
 }

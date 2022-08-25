@@ -287,7 +287,7 @@ class _MainMapPageState extends State<MainMapPage>
 
                 ListTile(
                   onTap: () async {
-                    await _auth.signout();
+                    await _auth.signout().then((value) => Navigator.pushReplacementNamed(context, '/login'));
                     log('logged out');
                   },
                   leading: Icon(Icons.exit_to_app),

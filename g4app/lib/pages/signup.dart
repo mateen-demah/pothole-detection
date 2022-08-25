@@ -12,8 +12,8 @@ class signup extends StatefulWidget {
 }
 
 class _signupState extends State<signup> {
-  String Firstname = "";
-  String lastname = "";
+  // String Firstname = "";
+  String username = "";
   String email="";
   var password="";
   String error ="";
@@ -46,41 +46,41 @@ class _signupState extends State<signup> {
                 //   ),
                   
                 // ),
-                SizedBox(height: 10,),
-                Container(
-                  margin: EdgeInsets.all(4),
-                  child:Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text('First Name:',
-                             style: TextStyle()
-                    ),
-                  ),    
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                Container(child: TextField(
-                      decoration: InputDecoration(
-                        filled: true,
-                        border:OutlineInputBorder(borderRadius: BorderRadius.circular(10),
-                                borderSide: BorderSide.none),
-                        focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.green),borderRadius: BorderRadius.circular(15.0)),
-                        // disabledBorder:OutlineInputBorder(borderSide: inpi),
+                // SizedBox(height: 10,),
+                // Container(
+                //   margin: EdgeInsets.all(4),
+                //   child:Align(
+                //     alignment: Alignment.centerLeft,
+                //     child: Text('First Name:',
+                //              style: TextStyle()
+                //     ),
+                //   ),    
+                // ),
+                // SizedBox(
+                //   height: 5,
+                // ),
+                // Container(child: TextField(
+                //       decoration: InputDecoration(
+                //         filled: true,
+                //         border:OutlineInputBorder(borderRadius: BorderRadius.circular(10),
+                //                 borderSide: BorderSide.none),
+                //         focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.green),borderRadius: BorderRadius.circular(15.0)),
+                //         // disabledBorder:OutlineInputBorder(borderSide: inpi),
                       
-                         hintText: "Please enter your first name",
-                         fillColor: Colors.grey[100],
+                //          hintText: "Please enter your first name",
+                //          fillColor: Colors.grey[100],
                          
-                      ),
+                //       ),
                       
-                      onChanged: (value) {
-                        setState(() {
-                           Firstname = value;
-                        });
+                //       onChanged: (value) {
+                //         setState(() {
+                //            Firstname = value;
+                //         });
                        
-                      },
+                //       },
                 
-                    ),
-                ),
+                //     ),
+                // ),
                 SizedBox(
                   height: 10,
                 ),
@@ -88,7 +88,7 @@ class _signupState extends State<signup> {
                   margin: EdgeInsets.all(4),
                   child:Align(
                     alignment: Alignment.centerLeft,
-                    child: Text('Last Name:',
+                    child: Text('Username:',
                     ),
                   ),
                   
@@ -101,12 +101,12 @@ class _signupState extends State<signup> {
                         filled: true,
                         border:OutlineInputBorder(borderRadius: BorderRadius.circular(10),borderSide: BorderSide.none),
                         focusedBorder:OutlineInputBorder(borderSide: BorderSide(color: Colors.green),borderRadius: BorderRadius.circular(15.0)),
-                         hintText: "Please enter your Last name",
+                         hintText: "Please enter your username",
                          fillColor: Colors.grey[100],
                       ),
                       onChanged: (value) {
                         setState(() {
-                          lastname = value;
+                          username = value;
                         });
                       },
                 
@@ -225,7 +225,7 @@ class _signupState extends State<signup> {
                       style: TextButton.styleFrom(
                         padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
                         primary: Colors.white,
-                        backgroundColor: Color(0xFF4CAF50),
+                        backgroundColor: Colors.red,
                         textStyle: const TextStyle(fontSize: 16),
                       ),
                       label: Text("continue with google",),
@@ -252,7 +252,7 @@ class _signupState extends State<signup> {
                       style: TextButton.styleFrom(
                         padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
                         primary: Colors.white,
-                        backgroundColor: Color(0xFF4CAF50),
+                        backgroundColor: Colors.blue,
                         textStyle: const TextStyle(fontSize: 16),
                       ),
                       icon: Icon(Icons.facebook),

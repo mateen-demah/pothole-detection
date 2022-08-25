@@ -42,6 +42,8 @@ dependencies:
   google_place: ^0.4.7
   geolocator: ^9.0.1
   flutter_svg: ^1.1.4
+  google_sign_in: ^5.4.1
+  flutter_facebook_auth: ^4.4.1
   
 
 dev_dependencies:

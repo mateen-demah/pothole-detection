@@ -19,7 +19,7 @@ class OnBoardingData {
 
 List<OnBoardingData> contents = [
   OnBoardingData(
-    image: 'assets/launch.png', 
+    image: 'assets/xx.png', 
     title: 'Drive mode', 
     description: 'The drive mode is turned on automatically when a high speed is detected. Users can also trun it off when moving at a high speed in other means of transport',
     title2: 'Audio mode', 
@@ -28,7 +28,7 @@ List<OnBoardingData> contents = [
   ),
 
   OnBoardingData(
-    image: 'assets/launch.png', 
+    image: 'assets/xx2.png', 
     title: 'Map overlay', 
     description: "A map showing the nature of every 100m of road with it's associated color ccode",
     title2: '', 
@@ -36,10 +36,10 @@ List<OnBoardingData> contents = [
   ),
 
   OnBoardingData(
-    image: 'assets/launch.png', 
+    image: 'assets/xx3.png', 
     title: 'Trip Selection', 
     description: "Enter the beginning and the end to be given a route",
-    title2: 'Audio mode', 
-    description2: 'The drive mode is turned on automatically when a high speed is detected. Users can also trun it off when moving'
+    title2: '', 
+    description2: ''
   ),
 ];

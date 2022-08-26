@@ -195,95 +195,48 @@ class _MainMapPageState extends State<MainMapPage>
           child: Drawer(
             child: ListView(
               children: [
-                // ignore: sized_box_for_whitespace
-                Container(
-                  height: 165.0,
-                  child: DrawerHeader(
-                    decoration: const BoxDecoration(
-                      color: Colors.black,
-                    ),
-                    child: Row(
-                      children: [
-                        CircleAvatar(
-                          radius: 32.0,
-                          backgroundImage: AssetImage('assets/user_icon.png'),
-                        ),
-                        SizedBox(
-                          width: 16.0,
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(2.0),
-                              child: Container(
-                                child: Text(
-                                  // '${user.firstName}',
-                                  "adwoa",
-                                  style: TextStyle(
-                                    fontSize: 16.0,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 6.0,
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-
-                DividerWidget(),
-
-                SizedBox(
-                  height: 12.0,
-                ),
-
                 //Drawer Body
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => Notifications()));
-                  },
-                  child: ListTile(
-                    leading: Icon(Icons.person),
-                    title: Text(
-                      'Visit Profile',
-                      style: TextStyle(fontSize: 15.0),
-                    ),
-                  ),
-                ),
+                // GestureDetector(
+                //   onTap: () {
+                //     Navigator.push(
+                //         context,
+                //         MaterialPageRoute(
+                //             builder: (context) => Notifications()));
+                //   },
+                //   child: ListTile(
+                //     leading: Icon(Icons.person),
+                //     title: Text(
+                //       'Visit Profile',
+                //       style: TextStyle(fontSize: 15.0),
+                //     ),
+                //   ),
+                // ),
 
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pushNamed(context, '/help');
-                  },
-                  child: ListTile(
-                    leading: Icon(Icons.help_center),
-                    title: Text(
-                      'Help',
-                      style: TextStyle(fontSize: 15.0),
-                    ),
-                  ),
-                ),
+                // GestureDetector(
+                //   onTap: () {
+                //     Navigator.pushNamed(context, '/help');
+                //   },
+                //   child: ListTile(
+                //     leading: Icon(Icons.help_center),
+                //     title: Text(
+                //       'Help',
+                //       style: TextStyle(fontSize: 15.0),
+                //     ),
+                //   ),
+                // ),
 
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pushNamed(context, '/about');
-                  },
-                  child: ListTile(
-                    leading: Icon(Icons.info),
-                    title: Text(
-                      'About',
-                      style: TextStyle(fontSize: 15.0),
-                    ),
-                  ),
-                ),
+                // GestureDetector(
+                //   onTap: () {
+                //     Navigator.pushNamed(context, '/about');
+                //   },
+                //   child: ListTile(
+                //     leading: Icon(Icons.info),
+                //     title: Text(
+                //       'About',
+                //       style: TextStyle(fontSize: 15.0),
+                //     ),
+                //   ),
+                // ),
 
                 ListTile(
                   onTap: () async {
@@ -355,41 +308,41 @@ class _MainMapPageState extends State<MainMapPage>
             ),
 
             // Search icon
-            Positioned(
-              top: 20.0,
-              left: screenWidth * 0.8,
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => SearchScreen(),
-                      ));
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(22.0),
-                      // ignore: prefer_const_literals_to_create_immutables
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black,
-                          blurRadius: 5.0,
-                          spreadRadius: 0.5,
-                          offset: Offset(0.1, 0.1),
-                        )
-                      ]),
-                  child: CircleAvatar(
-                    backgroundColor: Colors.white,
-                    child: Icon(
-                      Icons.search,
-                      color: Colors.black,
-                    ),
-                    radius: 20.0,
-                  ),
-                ),
-              ),
-            ),
+            // Positioned(
+            //   top: 20.0,
+            //   left: screenWidth * 0.8,
+            //   child: GestureDetector(
+            //     onTap: () {
+            //       Navigator.push(
+            //           context,
+            //           MaterialPageRoute(
+            //             builder: (context) => SearchScreen(),
+            //           ));
+            //     },
+            //     child: Container(
+            //       decoration: BoxDecoration(
+            //           color: Colors.white,
+            //           borderRadius: BorderRadius.circular(22.0),
+            //           // ignore: prefer_const_literals_to_create_immutables
+            //           boxShadow: [
+            //             BoxShadow(
+            //               color: Colors.black,
+            //               blurRadius: 5.0,
+            //               spreadRadius: 0.5,
+            //               offset: Offset(0.1, 0.1),
+            //             )
+            //           ]),
+            //       child: CircleAvatar(
+            //         backgroundColor: Colors.white,
+            //         child: Icon(
+            //           Icons.search,
+            //           color: Colors.black,
+            //         ),
+            //         radius: 20.0,
+            //       ),
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       ),

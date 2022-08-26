@@ -100,7 +100,7 @@ class _OnBoardingState extends State<OnBoarding> {
           ),
 
           Container(
-            height: 60,
+            height: 40,
             margin: const EdgeInsets.all(40),
             width: double.infinity,
             child: ElevatedButton(
@@ -124,8 +124,8 @@ class _OnBoardingState extends State<OnBoarding> {
 
   Container buildDot(int index, BuildContext context) {
     return Container(
-      height: 20,
-      width: 20,
+      height: 10,
+      width: 10,
       margin: const EdgeInsets.only(right: 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),

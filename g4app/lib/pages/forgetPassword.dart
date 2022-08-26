@@ -78,6 +78,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                         ),
                         child: const Text('Reset password'),
                         onPressed:()async{
+                          // Todo: work on email not being recieved for forget [assword]
                           
                           try{var result =await _auth.resetPassword(email);
                           if (result !=null){

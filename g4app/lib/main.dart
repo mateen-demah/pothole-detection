@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:g4app/pages/data_collection/collection_page.dart';
 import 'package:g4app/pages/data_collection/data_history.dart';
 
 void main() {

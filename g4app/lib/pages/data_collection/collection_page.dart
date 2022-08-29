@@ -379,13 +379,6 @@ class _CollectionPageState extends State<CollectionPage> {
     print('plot update is next ======================================');
     updatePlot();
     ++datapointsCollected;
-    // setState(() {
-    //   logTime = DateTime.now().millisecondsSinceEpoch;
-    //   gpsLatLong();
-    //   getAccelerometer();
-    //   if (startTime != null) updateDataSource();
-    //   ++datapointsCollected;
-    // });
   }
 
   Future<void> fetchSensorData() async {

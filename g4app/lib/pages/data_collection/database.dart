@@ -39,7 +39,7 @@ class SensorDataDb {
       moving_speed REAL NOT NULL,
       moving_speed_accuracy REAL NOT NULL,
       session_id TEXT NOT NULL,
-      is_exported INTEGER DEFAULT 0
+      is_extracted INTEGER DEFAULT 0
       )''');
 
     // schema for registered potholes
@@ -58,9 +58,10 @@ class SensorDataDb {
     // schema for sessionInfo
     await db.execute('''CREATE TABLE sessionInfo(
       session_id TEXT PRIMARY KEY,
-      datapoints INTEGER,
-      potholes INTEGER,
-      date INTEGER
+      is_extracted INTEGER DEFAULT 0,
+      is_predicted INTEGER DEFAULT 0,
+      is_uploaded INTEGER DEFAULT 0,
+      date INTEGER,
     )''');
 
     // schema road class labelling data
@@ -71,7 +72,41 @@ class SensorDataDb {
       category TEXT NOT NULL
     )''');
 
-    // TODO: create a schema for extracted features table
+    await db.execute('''CREATE TABLE extractedFeatures (
+      session_id TEXT NOT NULL,
+      timestamp INTEGER PRIMARY KEY,
+      latitude REAL NOT NULL,
+      longitude REAL NOT NULL,
+      avg_acc_x REAL NOT NULL,
+      avg_acc_y REAL NOT NULL,
+      avg_acc_z REAL NOT NULL,
+      std_acc_x REAL NOT NULL,
+      std_acc_y REAL NOT NULL,
+      std_acc_z REAL NOT NULL,
+      max_acc_x REAL NOT NULL,
+      max_acc_y REAL NOT NULL,
+      max_acc_z REAL NOT NULL,
+      min_acc_x REAL NOT NULL,
+      min_acc_y REAL NOT NULL,
+      min_acc_z REAL NOT NULL,
+      avg_gyro_x REAL NOT NULL,
+      avg_gyro_y REAL NOT NULL,
+      avg_gyro_z REAL NOT NULL,
+      std_gyro_x REAL NOT NULL,
+      std_gyro_y REAL NOT NULL,
+      std_gyro_z REAL NOT NULL,
+      max_gyro_x REAL NOT NULL,
+      max_gyro_y REAL NOT NULL,
+      max_gyro_z REAL NOT NULL,
+      min_gyro_x REAL NOT NULL,
+      min_gyro_y REAL NOT NULL,
+      min_gyro_z REAL NOT NULL,
+      avg_speed REAL NOT NULL,
+      std_speed REAL NOT NULL,
+      max_speed REAL NOT NULL,
+      min_speed REAL NOT NULL,
+      label INTEGER DEFAULT 0
+      )''');
     // TODO: create schema for model output
   }
 

@@ -30,8 +30,8 @@ void main() async {
         '/login': (context) => login(),
         '/signup': (context) => signup(),
         '/notification': (context) => Notifications(),
-        'onboard':(context) => OnBoarding(),
-        'home':(context) => MainMapPage()
+        'onboard': (context) => OnBoarding(),
+        'home': (context) => MainMapPage()
       },
     ),
   ));

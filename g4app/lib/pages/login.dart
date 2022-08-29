@@ -180,6 +180,7 @@ class _loginState extends State<login> {
                         if (result == null) {
                           print("error signing in ");
                         } else {
+                          Navigator.pushReplacementNamed(context, 'home');
                           print("signed in");
                         }
                       },

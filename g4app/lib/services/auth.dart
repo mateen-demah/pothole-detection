@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -27,8 +29,8 @@ class Authservices {
 
       return cred;
     } catch (e) {
-      print(e.toString());
-      return null;
+      log(e.toString());
+      throw e.toString();
     }
   }
 

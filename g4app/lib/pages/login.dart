@@ -18,7 +18,7 @@ class _loginState extends State<login> {
   // Textfield state
   String email = "";
   var password = "";
-  String googleerrorMessage="";
+  String googleerrorMessage = "";
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +73,9 @@ class _loginState extends State<login> {
                         borderRadius: BorderRadius.circular(15.0),
                         borderSide: BorderSide.none,
                       ),
-                      focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.green),borderRadius: BorderRadius.circular(15.0)),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.green),
+                          borderRadius: BorderRadius.circular(15.0)),
                       filled: true,
                       // icon: Icon(Icons.person),
                       hintText: "Please enter your email",
@@ -100,15 +102,15 @@ class _loginState extends State<login> {
                   height: 5,
                 ),
                 Container(
-                  
                   child: TextField(
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15.0),
                         borderSide: BorderSide.none,
                       ),
-                      focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.green),
-                      borderRadius: BorderRadius.circular(15.0)),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.green),
+                          borderRadius: BorderRadius.circular(15.0)),
                       filled: true,
                       // suffixIcon: Icon(
                       //   Icons.visibility,
@@ -130,7 +132,11 @@ class _loginState extends State<login> {
                 Container(
                   child: GestureDetector(
                     onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => ForgetPassword(),));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ForgetPassword(),
+                          ));
                     },
                     child: Align(
                       alignment: Alignment.centerRight,
@@ -149,11 +155,9 @@ class _loginState extends State<login> {
                 Container(
                   width: 250,
                   height: 40,
-                  
                   child: Material(
                     elevation: 2,
                     child: TextButton(
-                      
                       style: TextButton.styleFrom(
                         padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
                         primary: Colors.white,
@@ -171,8 +175,9 @@ class _loginState extends State<login> {
                         //   print(result.uid);
                         // }
                         //signin with email and password
-                        dynamic result =await _auth.signinWithEmailAndPassword(email, password);
-                        if (result == null){
+                        dynamic result = await _auth.signinWithEmailAndPassword(
+                            email, password);
+                        if (result == null) {
                           print("error signing in ");
                         } else {
                           print("signed in");
@@ -191,11 +196,12 @@ class _loginState extends State<login> {
                 // SignInButton(Buttons.Google,
                 //     text: 'continue with google',
                 //     onPressed: () {}),
-                Text(googleerrorMessage,),
+                Text(
+                  googleerrorMessage,style: TextStyle(color: Colors.red, fontSize: 14.0),
+                ),
                 Container(
                   width: 250,
                   height: 40,
-                  
                   child: Material(
                     elevation: 2,
                     child: TextButton.icon(
@@ -205,15 +211,27 @@ class _loginState extends State<login> {
                         backgroundColor: Colors.red,
                         textStyle: const TextStyle(fontSize: 16),
                       ),
-                      label: Text("continue with google",),
+                      label: Text(
+                        "continue with google",
+                      ),
                       // todo:add google icon
-                      icon:SvgPicture.asset('assets/Vector.svg',width: 23,),
+                      icon: SvgPicture.asset(
+                        'assets/Vector.svg',
+                        width: 23,
+                      ),
                       // icon: Icons.facebook,
                       onPressed: () {
-                        _auth.signInWithGoogle().then((value)=>Navigator.pushReplacementNamed(context, 'home')).catchError((enError){print(enError.toString());
-                        setState(() {
-                          googleerrorMessage='Could not sign in with google...Retry';
-                        });});
+                        _auth
+                            .signInWithGoogle()
+                            .then((value) =>
+                                Navigator.pushReplacementNamed(context, 'home'))
+                            .catchError((enError) {
+                          print(enError.toString());
+                          setState(() {
+                            googleerrorMessage =
+                                'Could not sign in with google...Retry';
+                          });
+                        });
                       },
                       // backgroundColor: Color.fromARGB(255, 98, 177, 101),
                     ),
@@ -227,7 +245,7 @@ class _loginState extends State<login> {
                   width: 250,
                   height: 40,
                   // decoration: OutlinedBorder(),
-                  
+
                   child: Material(
                     elevation: 2,
                     child: TextButton.icon(
@@ -238,7 +256,9 @@ class _loginState extends State<login> {
                         textStyle: const TextStyle(fontSize: 16),
                       ),
                       icon: Icon(Icons.facebook),
-                      label: Text("Continue with facebook",),
+                      label: Text(
+                        "Continue with facebook",
+                      ),
                       // icon: Icons.facebook,
                       onPressed: () {},
                       // backgroundColor: Color.fromARGB(255, 98, 177, 101),
@@ -256,8 +276,8 @@ class _loginState extends State<login> {
                       onTap: () => handleSignUp(context),
                       child: Text('Sign Up',
                           style: TextStyle(
-                              color: Colors.green, fontWeight: FontWeight.bold)
-                              ),
+                              color: Colors.green,
+                              fontWeight: FontWeight.bold)),
                     ),
                   ],
                 ),
@@ -273,6 +293,6 @@ class _loginState extends State<login> {
     Navigator.pushNamed(context, '/signup');
   }
   // void googlepush(BuildContext context){
-    
+
   // }
 }

@@ -53,9 +53,9 @@ class _MainMapPageState extends State<MainMapPage>
   PolylinePoints polylinePoints = PolylinePoints();
   String googleAPiKey = "AIzaSyAFUP5gFZRz6nfScFF3R5tNpcT2LRyr0i4";
 
-  void _onMapCreated(GoogleMapController _cntrl)async {
+  void _onMapCreated(GoogleMapController _cntrl) async {
     _controller = _cntrl;
-     LocationData locData = await _locatiion.getLocation();
+    LocationData locData = await _locatiion.getLocation();
     _controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
         target: LatLng(locData.latitude!, locData.longitude!), zoom: 18)));
   }
@@ -101,10 +101,11 @@ class _MainMapPageState extends State<MainMapPage>
       markerId: markerId,
       position: LatLng(pothole.data()['location'].latitude,
           pothole.data()['location'].longitude),
-      infoWindow: InfoWindow(title: "Pothole", snippet: pothole.data()['groupId']),
+      infoWindow:
+          InfoWindow(title: "Pothole", snippet: pothole.data()['groupId']),
       // icon: BitmapDescriptor.defaultMarker,
       // using created bitmapIcon
-      icon:_markerIcon,
+      icon: _markerIcon,
     );
     setState(() {
       _markers[markerId] = marker;
@@ -118,13 +119,24 @@ class _MainMapPageState extends State<MainMapPage>
   }
 
   double calcDistance(geoPoint1, geoPoint2) {
-    double distanceInMeters = Geolocator.distanceBetween(geoPoint1.latitude,geoPoint1.longitude,geoPoint2.latitude,geoPoint2.longitude,);
+    double distanceInMeters = Geolocator.distanceBetween(
+      geoPoint1.latitude,
+      geoPoint1.longitude,
+      geoPoint2.latitude,
+      geoPoint2.longitude,
+    );
 
     return distanceInMeters;
   }
+
   //todo: this function get the lat longs between the range.
-  Future<List<LatLng>> _getPolyline(double geoPoint1latitude,double geoPoint1longitude,double geoPoint2latitude,double geoPoint2longitude,id,dist)
-  async {
+  Future<List<LatLng>> _getPolyline(
+      double geoPoint1latitude,
+      double geoPoint1longitude,
+      double geoPoint2latitude,
+      double geoPoint2longitude,
+      id,
+      dist) async {
     List<LatLng> rangeLatLngs = [];
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
       googleAPiKey,
@@ -168,6 +180,7 @@ class _MainMapPageState extends State<MainMapPage>
       ),
     );
   }
+
   @override
   void initState() {
     super.initState();
@@ -240,7 +253,8 @@ class _MainMapPageState extends State<MainMapPage>
 
                 ListTile(
                   onTap: () async {
-                    await _auth.signout().then((value) => Navigator.pushReplacementNamed(context, '/login'));
+                    await _auth.signout().then((value) =>
+                        Navigator.pushReplacementNamed(context, '/login'));
                     log('logged out');
                   },
                   leading: Icon(Icons.exit_to_app),
@@ -269,7 +283,8 @@ class _MainMapPageState extends State<MainMapPage>
                 zoomControlsEnabled: true,
                 onMapCreated: _onMapCreated,
                 markers: Set<Marker>.of(_markers.values),
-                polylines:Set<Polyline>.of(polylines == null ? [] : polylines!),
+                polylines:
+                    Set<Polyline>.of(polylines == null ? [] : polylines!),
               );
             }),
 

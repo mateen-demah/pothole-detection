@@ -22,16 +22,16 @@ void main() async {
     value: Authservices().user,
     initialData: null,
     child: MaterialApp(
-      theme: ThemeData(scaffoldBackgroundColor: Colors.white),
       debugShowCheckedModeBanner: false,
+      theme: ThemeData(scaffoldBackgroundColor: Colors.white),
       // home: splash(),
       routes: {
         '/': (context) => splash(),
         '/login': (context) => login(),
         '/signup': (context) => signup(),
         '/notification': (context) => Notifications(),
-        'onboard':(context) => OnBoarding(),
-        'home':(context) => MainMapPage()
+        'onboard': (context) => OnBoarding(),
+        'home': (context) => MainMapPage()
       },
     ),
   ));

@@ -24,7 +24,7 @@ List<OnBoardingData> contents = [
     description: 'The drive mode is turned on automatically when a high speed is detected. Users can also trun it off when moving at a high speed in other means of transport',
     title2: 'Audio mode', 
     description2: 'The drive mode is turned on automatically when a high speed is detected. Users can also trun it off when moving\n'
-                  "when moving at a high speed in other means of transport"
+                  "when moving at a high speed in other means of transport",
   ),
 
   OnBoardingData(
@@ -32,7 +32,7 @@ List<OnBoardingData> contents = [
     title: 'Map overlay', 
     description: "A map showing the nature of every 100m of road with it's associated color ccode",
     title2: '', 
-    description2: ''
+    description2: '',
   ),
 
   OnBoardingData(
@@ -40,6 +40,6 @@ List<OnBoardingData> contents = [
     title: 'Trip Selection', 
     description: "Enter the beginning and the end to be given a route",
     title2: '', 
-    description2: ''
+    description2: '',
   ),
 ];

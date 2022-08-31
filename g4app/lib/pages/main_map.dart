@@ -291,7 +291,7 @@ class _MainMapPageState extends State<MainMapPage>
             //Hamburger for drawer
             /// Hanmburger Menu Icon
             Positioned(
-              top: 20.0,
+              top: 13.0,
               left: 10.0,
               child: GestureDetector(
                 onTap: () {
@@ -304,10 +304,10 @@ class _MainMapPageState extends State<MainMapPage>
                       // ignore: prefer_const_literals_to_create_immutables
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black,
+                          color: Color.fromRGBO(167, 162, 162, 1),
                           blurRadius: 5.0,
-                          spreadRadius: 0.5,
-                          offset: Offset(0.7, 0.7),
+                          spreadRadius: 0.1,
+                          offset: Offset(0.1, 0.1),
                         )
                       ]),
                   child: CircleAvatar(

@@ -198,9 +198,10 @@ class _loginState extends State<login> {
                 // SignInButton(Buttons.Google,
                 //     text: 'continue with google',
                 //     onPressed: () {}),
-                
+
                 Text(
-                  googleerrorMessage,style: TextStyle(color: Colors.red, fontSize: 14.0),
+                  googleerrorMessage,
+                  style: TextStyle(color: Colors.red, fontSize: 14.0),
                 ),
                 Container(
                   width: 250,

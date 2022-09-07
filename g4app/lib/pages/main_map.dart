@@ -194,9 +194,9 @@ class _MainMapPageState extends State<MainMapPage>
 
   fetchSpecificArea(lower, upper) {
     log('getting');
-    good=0;
-    Satisfactory=0;
-    bad=0;
+    good = 0;
+    Satisfactory = 0;
+    bad = 0;
     FirebaseFirestore.instance
         .collection('Potholes')
         .where("geohash", isGreaterThanOrEqualTo: lower)
@@ -212,11 +212,11 @@ class _MainMapPageState extends State<MainMapPage>
           // String id = document.docs[i].id;
           double dist = calcDistance(geoPoint1, geoPoint2);
           if (dist <= 50) {
-            good = good + dist/1000;
+            good = good + dist / 1000;
           } else if (dist > 50 && dist < 100) {
-            Satisfactory = Satisfactory + dist/1000;
+            Satisfactory = Satisfactory + dist / 1000;
           } else {
-            bad = (bad + dist/1000);
+            bad = (bad + dist / 1000);
           }
         }
         setState(() {
@@ -225,10 +225,11 @@ class _MainMapPageState extends State<MainMapPage>
       }
     });
   }
+
   //animating to area
-  void animateToArea(latitude,longitude)  {
-    _controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
-        target: LatLng(latitude,longitude), zoom: 16)));
+  void animateToArea(latitude, longitude) {
+    _controller.animateCamera(CameraUpdate.newCameraPosition(
+        CameraPosition(target: LatLng(latitude, longitude), zoom: 16)));
   }
 
   @override
@@ -349,21 +350,22 @@ class _MainMapPageState extends State<MainMapPage>
                           //Todo:call reverse geocoding
                           List<Location> locations =
                               await locationFromAddress(governmentSearch);
-                          //Todo: geohash
+                          //geohash
                           var encoded = georange.encode(
                               locations[0].latitude, locations[0].longitude);
                           log(encoded.toString());
                           //Getting range
                           Range range = georange.geohashRange(
                               locations[0].latitude, locations[0].longitude,
-                              distance: 20);
+                              distance: 5);
                           log(range.lower.toString());
                           log(range.upper.toString());
 
-                          //Todo:fetch data from firestore
+                          //fetch data from firestore
                           fetchSpecificArea(range.lower, range.upper);
                           // moving to locations position
-                          animateToArea(locations[0].latitude, locations[0].longitude);
+                          animateToArea(
+                              locations[0].latitude, locations[0].longitude);
                         }
                       },
                     ),
@@ -508,7 +510,8 @@ class _MainMapPageState extends State<MainMapPage>
                                 offset: Offset(0.1, 0.1),
                               )
                             ]),
-                        child: Center(child: Text('${good.toStringAsFixed(2)}km')),
+                        child:
+                            Center(child: Text('${good.toStringAsFixed(2)}km')),
                       ),
                       //Satisfactory
                       Container(
@@ -527,7 +530,9 @@ class _MainMapPageState extends State<MainMapPage>
                                 offset: Offset(0.1, 0.1),
                               )
                             ]),
-                        child: Center(child: Text('${Satisfactory.toStringAsFixed(2)}km')),
+                        child: Center(
+                            child:
+                                Text('${Satisfactory.toStringAsFixed(2)}km')),
                       ),
 
                       //bad
@@ -547,7 +552,8 @@ class _MainMapPageState extends State<MainMapPage>
                                 offset: Offset(0.1, 0.1),
                               )
                             ]),
-                        child: Center(child: Text('${bad.toStringAsFixed(2)}km')),
+                        child:
+                            Center(child: Text('${bad.toStringAsFixed(2)}km')),
                       ),
                     ],
                   ),

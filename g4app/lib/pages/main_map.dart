@@ -14,9 +14,11 @@ import 'package:g4app/services/auth.dart';
 import 'package:g4app/tools/dividerWidget.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_place/src/details/details_result.dart';
-import 'package:location/location.dart';
+import 'package:location/location.dart' as location;
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:georange/georange.dart';
+import 'package:geocoding/geocoding.dart';
 
 class MainMapPage extends StatefulWidget {
   const MainMapPage({Key? key, this.startPosition, this.endPosition})
@@ -32,6 +34,7 @@ class MainMapPage extends StatefulWidget {
 class _MainMapPageState extends State<MainMapPage>
     with TickerProviderStateMixin {
   final Authservices _auth = Authservices();
+  GeoRange georange = GeoRange();
 
   // creating an object instance called scaffold state so that it can be used for the hamburger for the drawer
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
@@ -43,7 +46,12 @@ class _MainMapPageState extends State<MainMapPage>
   );
 
   late final GoogleMapController _controller;
-  final _locatiion = Location();
+  final _locatiion = location.Location();
+  late String governmentSearch;
+  double good = 0;
+  double Satisfactory = 0;
+  double bad = 0;
+  bool detailsShow = false;
 
   Map<MarkerId, Marker> _markers = <MarkerId, Marker>{};
   late BitmapDescriptor _markerIcon;
@@ -55,7 +63,7 @@ class _MainMapPageState extends State<MainMapPage>
 
   void _onMapCreated(GoogleMapController _cntrl) async {
     _controller = _cntrl;
-    LocationData locData = await _locatiion.getLocation();
+    location.LocationData locData = await _locatiion.getLocation();
     _controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
         target: LatLng(locData.latitude!, locData.longitude!), zoom: 18)));
   }
@@ -72,6 +80,8 @@ class _MainMapPageState extends State<MainMapPage>
         for (int i = 0; i < document.docs.length - 1; ++i) {
           final geoPoint1 = document.docs[i].data()["location"] as GeoPoint;
           final geoPoint2 = document.docs[i + 1].data()["location"] as GeoPoint;
+          log(geoPoint1.toString());
+          log(geoPoint2.toString());
           String id = document.docs[i].id;
           double dist = calcDistance(geoPoint1, geoPoint2);
           fetchPotholes(document.docs[i]);
@@ -180,6 +190,46 @@ class _MainMapPageState extends State<MainMapPage>
       ),
     );
   }
+  //Todo:Function to get specific data
+
+  fetchSpecificArea(lower, upper) {
+    log('getting');
+    good=0;
+    Satisfactory=0;
+    bad=0;
+    FirebaseFirestore.instance
+        .collection('Potholes')
+        .where("geohash", isGreaterThanOrEqualTo: lower)
+        .where("geohash", isLessThanOrEqualTo: upper)
+        .get()
+        .then((document) async {
+      if (document.docs.isNotEmpty) {
+        for (int i = 0; i < document.docs.length - 1; ++i) {
+          final geoPoint1 = document.docs[i].data()["location"] as GeoPoint;
+          final geoPoint2 = document.docs[i + 1].data()["location"] as GeoPoint;
+          log(geoPoint1.toString());
+          log(geoPoint2.toString());
+          // String id = document.docs[i].id;
+          double dist = calcDistance(geoPoint1, geoPoint2);
+          if (dist <= 50) {
+            good = good + dist/1000;
+          } else if (dist > 50 && dist < 100) {
+            Satisfactory = Satisfactory + dist/1000;
+          } else {
+            bad = (bad + dist/1000);
+          }
+        }
+        setState(() {
+          detailsShow = true;
+        });
+      }
+    });
+  }
+  //animating to area
+  void animateToArea(latitude,longitude)  {
+    _controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
+        target: LatLng(latitude,longitude), zoom: 16)));
+  }
 
   @override
   void initState() {
@@ -207,6 +257,7 @@ class _MainMapPageState extends State<MainMapPage>
           ///SIDE NAVIGATION PANEL
           child: Drawer(
             child: ListView(
+              padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
               children: [
                 //Drawer Body
                 // GestureDetector(
@@ -250,6 +301,74 @@ class _MainMapPageState extends State<MainMapPage>
                 //     ),
                 //   ),
                 // ),
+                SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  child: TextField(
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                        borderSide: BorderSide.none,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.green),
+                          borderRadius: BorderRadius.circular(15.0)),
+                      filled: true,
+                      suffixIcon: Icon(Icons.search),
+                      hintText: "Area/community",
+                      fillColor: Color.fromARGB(255, 191, 226, 178),
+                    ),
+                    // obscureText: true,
+                    onChanged: (value) {
+                      setState(() {
+                        governmentSearch = value;
+                      });
+                    },
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+
+                Container(
+                  width: 20,
+                  height: 40,
+                  child: Material(
+                    elevation: 2,
+                    child: TextButton(
+                      style: TextButton.styleFrom(
+                        padding: const EdgeInsets.fromLTRB(5, 2, 5, 2),
+                        primary: Colors.white,
+                        backgroundColor: Color.fromARGB(255, 36, 179, 41),
+                        textStyle: const TextStyle(fontSize: 16),
+                      ),
+                      child: const Text('Search'),
+                      onPressed: () async {
+                        if (governmentSearch != '') {
+                          //Todo:call reverse geocoding
+                          List<Location> locations =
+                              await locationFromAddress(governmentSearch);
+                          //Todo: geohash
+                          var encoded = georange.encode(
+                              locations[0].latitude, locations[0].longitude);
+                          log(encoded.toString());
+                          //Getting range
+                          Range range = georange.geohashRange(
+                              locations[0].latitude, locations[0].longitude,
+                              distance: 20);
+                          log(range.lower.toString());
+                          log(range.upper.toString());
+
+                          //Todo:fetch data from firestore
+                          fetchSpecificArea(range.lower, range.upper);
+                          // moving to locations position
+                          animateToArea(locations[0].latitude, locations[0].longitude);
+                        }
+                      },
+                    ),
+                  ),
+                ),
 
                 ListTile(
                   onTap: () async {
@@ -295,6 +414,7 @@ class _MainMapPageState extends State<MainMapPage>
               left: 10.0,
               child: GestureDetector(
                 onTap: () {
+                  print("object");
                   scaffoldKey.currentState!.openDrawer();
                 },
                 child: Container(
@@ -358,6 +478,82 @@ class _MainMapPageState extends State<MainMapPage>
             //     ),
             //   ),
             // ),
+
+            // Builder(builder: (context){
+            //   return null;
+            // }),
+
+            // display of distances
+            Builder(builder: (context) {
+              if (detailsShow)
+                return Positioned(
+                  bottom: 13.0,
+                  left: 10.0,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.all(5),
+                        width: 80,
+                        height: 50,
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10.0),
+                            // ignore: prefer_const_literals_to_create_immutables
+                            boxShadow: [
+                              BoxShadow(
+                                color: Color.fromARGB(255, 40, 116, 5),
+                                blurRadius: 5.0,
+                                spreadRadius: 0.1,
+                                offset: Offset(0.1, 0.1),
+                              )
+                            ]),
+                        child: Center(child: Text('${good.toStringAsFixed(2)}km')),
+                      ),
+                      //Satisfactory
+                      Container(
+                        margin: EdgeInsets.all(5),
+                        width: 80,
+                        height: 50,
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10.0),
+                            // ignore: prefer_const_literals_to_create_immutables
+                            boxShadow: [
+                              BoxShadow(
+                                color: Color.fromARGB(255, 236, 220, 68),
+                                blurRadius: 5.0,
+                                spreadRadius: 0.1,
+                                offset: Offset(0.1, 0.1),
+                              )
+                            ]),
+                        child: Center(child: Text('${Satisfactory.toStringAsFixed(2)}km')),
+                      ),
+
+                      //bad
+                      Container(
+                        margin: EdgeInsets.all(5),
+                        width: 80,
+                        height: 50,
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10.0),
+                            // ignore: prefer_const_literals_to_create_immutables
+                            boxShadow: [
+                              BoxShadow(
+                                color: Color.fromARGB(255, 156, 9, 9),
+                                blurRadius: 5.0,
+                                spreadRadius: 0.1,
+                                offset: Offset(0.1, 0.1),
+                              )
+                            ]),
+                        child: Center(child: Text('${bad.toStringAsFixed(2)}km')),
+                      ),
+                    ],
+                  ),
+                );
+              return SizedBox.shrink();
+            }),
           ],
         ),
       ),

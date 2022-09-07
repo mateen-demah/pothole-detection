@@ -44,6 +44,8 @@ dependencies:
   flutter_svg: ^1.1.4
   google_sign_in: ^5.4.1
   flutter_facebook_auth: ^4.4.1
+  georange: ^1.0.0
+  geocoding: ^2.0.5
   
 
 dev_dependencies:

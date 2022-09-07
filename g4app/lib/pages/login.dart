@@ -194,9 +194,11 @@ class _loginState extends State<login> {
                   color: Colors.grey,
                   height: 25,
                 ),
+                Text('Continue With'),
                 // SignInButton(Buttons.Google,
                 //     text: 'continue with google',
                 //     onPressed: () {}),
+                
                 Text(
                   googleerrorMessage,style: TextStyle(color: Colors.red, fontSize: 14.0),
                 ),
@@ -213,7 +215,7 @@ class _loginState extends State<login> {
                         textStyle: const TextStyle(fontSize: 16),
                       ),
                       label: Text(
-                        "continue with google",
+                        "google",
                       ),
                       // todo:add google icon
                       icon: SvgPicture.asset(
@@ -258,7 +260,7 @@ class _loginState extends State<login> {
                       ),
                       icon: Icon(Icons.facebook),
                       label: Text(
-                        "Continue with facebook",
+                        "facebook",
                       ),
                       // icon: Icons.facebook,
                       onPressed: () {},

@@ -260,51 +260,26 @@ class _MainMapPageState extends State<MainMapPage>
             child: ListView(
               padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
               children: [
-                //Drawer Body
-                // GestureDetector(
-                //   onTap: () {
-                //     Navigator.push(
-                //         context,
-                //         MaterialPageRoute(
-                //             builder: (context) => Notifications()));
-                //   },
-                //   child: ListTile(
-                //     leading: Icon(Icons.person),
+                // ListTile(
+                //   leading: Container(
+                //     width: screenWidth * 0.04,
+                //     height: screenHeight * 0.01,
+                //     color: Colors.lightGreen,
+                //   ),
                 //     title: Text(
                 //       'Visit Profile',
                 //       style: TextStyle(fontSize: 15.0),
                 //     ),
-                //   ),
                 // ),
 
-                // GestureDetector(
-                //   onTap: () {
-                //     Navigator.pushNamed(context, '/help');
-                //   },
-                //   child: ListTile(
-                //     leading: Icon(Icons.help_center),
-                //     title: Text(
-                //       'Help',
-                //       style: TextStyle(fontSize: 15.0),
-                //     ),
-                //   ),
+                // SizedBox(
+                //   height: 20,
                 // ),
 
-                // GestureDetector(
-                //   onTap: () {
-                //     Navigator.pushNamed(context, '/about');
-                //   },
-                //   child: ListTile(
-                //     leading: Icon(Icons.info),
-                //     title: Text(
-                //       'About',
-                //       style: TextStyle(fontSize: 15.0),
-                //     ),
-                //   ),
-                // ),
                 SizedBox(
-                  height: 20,
+                  height: 10,
                 ),
+
                 Container(
                   child: TextField(
                     decoration: InputDecoration(
@@ -328,6 +303,7 @@ class _MainMapPageState extends State<MainMapPage>
                     },
                   ),
                 ),
+
                 SizedBox(
                   height: 20,
                 ),
@@ -340,7 +316,7 @@ class _MainMapPageState extends State<MainMapPage>
                     child: TextButton(
                       style: TextButton.styleFrom(
                         padding: const EdgeInsets.fromLTRB(5, 2, 5, 2),
-                        primary: Colors.white,
+                        primary: Colors.black,
                         backgroundColor: Color.fromARGB(255, 36, 179, 41),
                         textStyle: const TextStyle(fontSize: 16),
                       ),
@@ -372,18 +348,88 @@ class _MainMapPageState extends State<MainMapPage>
                   ),
                 ),
 
-                ListTile(
-                  onTap: () async {
-                    await _auth.signout().then((value) =>
-                        Navigator.pushReplacementNamed(context, '/login'));
-                    log('logged out');
-                  },
-                  leading: Icon(Icons.exit_to_app),
-                  title: Text(
-                    'Sign Out',
-                    style: TextStyle(fontSize: 15.0),
+                SizedBox(
+                  height: 20,
+                ),
+
+                Container(
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 50,
+                        height: 10,
+                        color: Colors.green,
+                      ),
+                      SizedBox(width: 60),
+                      Text(
+                        "potholes < 10%"
+                      ),
+                    ]
+                  ),
+                ),
+                
+                SizedBox(height: 20),
+
+                Container(
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 50,
+                        height: 10,
+                        color: Colors.yellow,
+                      ),
+                      SizedBox(width: 60),
+                      Text(
+                        "potholes < 85%"
+                      ),
+                    ]
+                  ),
+                ),
+                
+                SizedBox(height: 20),
+
+                Container(
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 50,
+                        height: 10,
+                        color: Colors.red,
+                      ),
+                      SizedBox(width: 60),
+                      Text(
+                        "potholes > 85%"
+                      ),
+                    ]
+                  ),
+                ),
+
+                SizedBox(
+                  height: screenHeight * 0.45
+                ),
+        
+                Center(
+                  child: Card(
+                    color: Colors.red,
+                    child: ListTile(
+                      onTap: () async {
+                        await _auth.signout();
+                        log('logged out');
+                      },
+                      title: Center(
+                        child: Text(
+                          'Sign Out',
+                          style: TextStyle(
+                            fontSize: 15.0,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
                 )
+
+
               ],
             ),
           ),

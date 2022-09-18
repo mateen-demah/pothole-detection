@@ -24,7 +24,7 @@ void main() async {
     child: MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(scaffoldBackgroundColor: Colors.white),
-      // home: splash(),
+      // home: splash(), 
       routes: {
         '/': (context) => splash(),
         '/login': (context) => login(),

@@ -39,6 +39,10 @@ class _splashState extends State<splash> {
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
+
+
     return Scaffold(
       // backgroundColor: Colors.green[400],
       backgroundColor: Colors.white,
@@ -56,11 +60,13 @@ class _splashState extends State<splash> {
                       borderRadius: BorderRadius.circular(200),
                       child: Image.asset(
                         'assets/logo.png',
-                        width: 170,
-                        height: 170,
+                        // width: 170,
+                        // height: 170,
+                        width: screenWidth * 0.5,
+                        height: screenHeight * 0.5,
                       ),
                     ),
-                    SizedBox(height: 20),
+                    // SizedBox(height: 20),
                     Text(
                       'G4 App',
                       style:

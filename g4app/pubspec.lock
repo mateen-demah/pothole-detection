@@ -317,6 +317,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.1"
+  georange:
+    dependency: "direct main"
+    description:
+      name: georange
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0"
   google_maps_flutter:
     dependency: "direct main"
     description:

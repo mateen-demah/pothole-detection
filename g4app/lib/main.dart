@@ -9,8 +9,11 @@ import 'package:g4app/pages/onboarding.dart';
 import 'package:g4app/pages/signup.dart';
 import 'package:g4app/pages/splash.dart';
 import 'package:g4app/services/auth.dart';
+import 'package:workmanager/workmanager.dart';
 import 'firebase_options.dart';
 import 'package:provider/provider.dart';
+
+import 'pages/data_collection/bg_callback.dart';
 
 void main() async {
   //initializing firebase
@@ -18,13 +21,73 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  // initialise background services worker
+  Workmanager().initialize(
+    callbackDispatcher,
+    isInDebugMode: true,
+  );
+
   runApp(StreamProvider<User?>.value(
     value: Authservices().user,
     initialData: null,
     child: MaterialApp(
       theme: ThemeData(scaffoldBackgroundColor: Colors.white),
       debugShowCheckedModeBanner: false,
-      // home: splash(),
+      // home: Scaffold(
+      //     body: Column(
+      //   children: [
+      //     ElevatedButton(
+      //         onPressed: () {
+      //           Workmanager().registerOneOffTask(
+      //             uploadingTaskKey,
+      //             uploadingTaskKey,
+      //             initialDelay: const Duration(seconds: 10),
+      //             constraints: Constraints(
+      //               networkType: NetworkType.connected,
+      //               requiresBatteryNotLow: true,
+      //             ),
+      //             backoffPolicy: BackoffPolicy.linear,
+      //             backoffPolicyDelay: const Duration(minutes: 1),
+      //           );
+      //         },
+      //         child: Text("uploading")),
+      //     ElevatedButton(
+      //         onPressed: () {
+      //           Workmanager().registerOneOffTask(
+      //             predictionTaskKey,
+      //             predictionTaskKey,
+      //             initialDelay: const Duration(seconds: 10),
+      //             constraints: Constraints(
+      //               networkType: NetworkType.not_required,
+      //               requiresBatteryNotLow: true,
+      //               requiresCharging: true,
+      //               requiresDeviceIdle: true,
+      //               requiresStorageNotLow: true,
+      //             ),
+      //             backoffPolicy: BackoffPolicy.linear,
+      //             backoffPolicyDelay: const Duration(minutes: 1),
+      //           );
+      //         },
+      //         child: Text("prediction")),
+      //     ElevatedButton(
+      //         onPressed: () {
+      //           Workmanager().registerPeriodicTask(
+      //             speedMonitorKey,
+      //             speedMonitorKey,
+      //             frequency: const Duration(seconds: 40),
+      //             initialDelay: const Duration(seconds: 10),
+      //             constraints: Constraints(
+      //               networkType: NetworkType.not_required,
+      //               requiresBatteryNotLow: true,
+      //             ),
+      //             backoffPolicy: BackoffPolicy.linear,
+      //             backoffPolicyDelay: const Duration(minutes: 1),
+      //           );
+      //         },
+      //         child: Text("speed monitoring")),
+      //   ],
+      // )),
       routes: {
         '/': (context) => splash(),
         '/login': (context) => login(),

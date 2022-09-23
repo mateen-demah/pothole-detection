@@ -61,7 +61,8 @@ class SensorDataDb {
       is_extracted INTEGER DEFAULT 0,
       is_predicted INTEGER DEFAULT 0,
       is_uploaded INTEGER DEFAULT 0,
-      date INTEGER,
+      location_corrected INTEGER DEFAULT 0,
+      date INTEGER
     )''');
 
     // schema road class labelling data
@@ -105,9 +106,9 @@ class SensorDataDb {
       std_speed REAL NOT NULL,
       max_speed REAL NOT NULL,
       min_speed REAL NOT NULL,
-      label INTEGER DEFAULT 0
+      label INTEGER DEFAULT 0,
+      geohash REAL
       )''');
-    // TODO: create schema for model output
   }
 
   Future<int> insert(String tableName, Map<String, Object> sensorData) async {

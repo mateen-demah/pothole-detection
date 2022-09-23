@@ -6,6 +6,9 @@ import 'package:g4app/pages/login.dart';
 import 'package:g4app/pages/onboarding.dart';
 import 'package:g4app/wrapper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:workmanager/workmanager.dart';
+
+import 'data_collection/bg_callback.dart';
 // import 'package:http/http.dart';
 
 class splash extends StatefulWidget {
@@ -23,16 +26,16 @@ class _splashState extends State<splash> {
     super.initState();
     wrapperOnboardinit();
     // whereAreWeGoing = wapperfunction
+    registerBackgroundWorkers();
     Future.delayed(
       const Duration(milliseconds: 3000),
       () {
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) {
-                  return initScreen == null|| initScreen==false ? OnBoarding() : Wrapper();
-                  }
-            ));
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) {
+          return initScreen == null || initScreen == false
+              ? OnBoarding()
+              : Wrapper();
+        }));
       },
     );
   }
@@ -93,5 +96,45 @@ class _splashState extends State<splash> {
     log(initScreen.toString());
     await preferences.setBool('initScreen', true);
     return initScreen;
+  }
+
+  void registerBackgroundWorkers() async {
+    Workmanager().registerOneOffTask(
+      uploadingTaskKey,
+      uploadingTaskKey,
+      initialDelay: const Duration(seconds: 10),
+      constraints: Constraints(
+        networkType: NetworkType.connected,
+        requiresBatteryNotLow: true,
+      ),
+      backoffPolicy: BackoffPolicy.linear,
+      backoffPolicyDelay: const Duration(minutes: 1),
+    );
+    Workmanager().registerOneOffTask(
+      predictionTaskKey,
+      predictionTaskKey,
+      initialDelay: const Duration(seconds: 10),
+      constraints: Constraints(
+        networkType: NetworkType.not_required,
+        requiresBatteryNotLow: true,
+        requiresCharging: true,
+        requiresDeviceIdle: true,
+        requiresStorageNotLow: true,
+      ),
+      backoffPolicy: BackoffPolicy.linear,
+      backoffPolicyDelay: const Duration(minutes: 1),
+    );
+    Workmanager().registerPeriodicTask(
+      speedMonitorKey,
+      speedMonitorKey,
+      frequency: const Duration(seconds: 40),
+      initialDelay: const Duration(seconds: 10),
+      constraints: Constraints(
+        networkType: NetworkType.not_required,
+        requiresBatteryNotLow: true,
+      ),
+      backoffPolicy: BackoffPolicy.linear,
+      backoffPolicyDelay: const Duration(minutes: 1),
+    );
   }
 }

@@ -225,11 +225,9 @@ class _loginState extends State<login> {
                       ),
                       // icon: Icons.facebook,
                       onPressed: () {
-                        _auth
-                            .signInWithGoogle()
-                            .then((value) =>
-                                Navigator.pushReplacementNamed(context, 'home'))
-                            .catchError((enError) {
+                        _auth.signInWithGoogle().then((value) =>
+                        Navigator.pushReplacementNamed(context, 'home'))
+                          .catchError((enError) {
                           print(enError.toString());
                           setState(() {
                             googleerrorMessage =

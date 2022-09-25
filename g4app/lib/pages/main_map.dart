@@ -323,6 +323,8 @@ class _MainMapPageState extends State<MainMapPage>
 
                           //fetch data from firestore
                           fetchSpecificArea(range.lower, range.upper);
+                          //closing drawer
+                          scaffoldKey.currentState!.closeDrawer();
                           // moving to locations position
                           animateToArea(
                               locations[0].latitude, locations[0].longitude);
@@ -337,67 +339,54 @@ class _MainMapPageState extends State<MainMapPage>
                 ),
 
                 Container(
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 50,
-                        height: 10,
-                        color: Colors.green,
-                      ),
-                      SizedBox(width: 60),
-                      Text(
-                        "potholes < 10%"
-                      ),
-                    ]
-                  ),
+                  child: Row(children: [
+                    Container(
+                      width: 50,
+                      height: 10,
+                      color: Colors.green,
+                    ),
+                    SizedBox(width: 60),
+                    Text("potholes < 10%"),
+                  ]),
                 ),
-                
+
                 SizedBox(height: 20),
 
                 Container(
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 50,
-                        height: 10,
-                        color: Colors.yellow,
-                      ),
-                      SizedBox(width: 60),
-                      Text(
-                        "potholes < 85%"
-                      ),
-                    ]
-                  ),
+                  child: Row(children: [
+                    Container(
+                      width: 50,
+                      height: 10,
+                      color: Colors.yellow,
+                    ),
+                    SizedBox(width: 60),
+                    Text("potholes < 85%"),
+                  ]),
                 ),
-                
+
                 SizedBox(height: 20),
 
                 Container(
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 50,
-                        height: 10,
-                        color: Colors.red,
-                      ),
-                      SizedBox(width: 60),
-                      Text(
-                        "potholes > 85%"
-                      ),
-                    ]
-                  ),
+                  child: Row(children: [
+                    Container(
+                      width: 50,
+                      height: 10,
+                      color: Colors.red,
+                    ),
+                    SizedBox(width: 60),
+                    Text("potholes > 85%"),
+                  ]),
                 ),
 
-                SizedBox(
-                  height: screenHeight * 0.45
-                ),
-        
+                SizedBox(height: screenHeight * 0.45),
+
                 Center(
                   child: Card(
                     color: Colors.red,
                     child: ListTile(
                       onTap: () async {
-                        await _auth.signout();
+                        await _auth.signout().then((value) =>
+                            Navigator.pushReplacementNamed(context, '/login'));
                         log('logged out');
                       },
                       title: Center(
@@ -412,8 +401,6 @@ class _MainMapPageState extends State<MainMapPage>
                     ),
                   ),
                 )
-
-
               ],
             ),
           ),

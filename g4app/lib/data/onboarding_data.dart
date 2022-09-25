@@ -28,18 +28,16 @@ List<OnBoardingData> contents = [
   // ),
 
   OnBoardingData(
-    image: 'assets/xx2.png', 
+    image: 'assets/img1.png', 
     title: 'Map overlay', 
-    description: "A map showing the nature of every 100m of road with it's associated color ccode",
+    description: "A map showing the nature of every 100m of road with it's associated color code",
     // title2: '', 
     // description2: '',
   ),
 
-  // OnBoardingData(
-  //   image: 'assets/xx3.png', 
-  //   title: 'Trip Selection', 
-  //   description: "Enter the beginning and the end to be given a route",
-  //   title2: '', 
-  //   description2: '',
-  // ),
+  OnBoardingData(
+    image: 'assets/img2.png', 
+    title: 'Community Check', 
+    description: "Enter the name of a community or vicinty to search for the kilometers of good, fairly good and bad roads",
+  ),
 ];

@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, duplicate_ignore
 import 'dart:async';
 import 'dart:developer';
 
@@ -256,26 +256,10 @@ class _MainMapPageState extends State<MainMapPage>
           width: 255.0,
 
           ///SIDE NAVIGATION PANEL
-          child: Drawer(
+          child: Drawer(    
             child: ListView(
               padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
               children: [
-                // ListTile(
-                //   leading: Container(
-                //     width: screenWidth * 0.04,
-                //     height: screenHeight * 0.01,
-                //     color: Colors.lightGreen,
-                //   ),
-                //     title: Text(
-                //       'Visit Profile',
-                //       style: TextStyle(fontSize: 15.0),
-                //     ),
-                // ),
-
-                // SizedBox(
-                //   height: 20,
-                // ),
-
                 SizedBox(
                   height: 10,
                 ),
@@ -454,8 +438,7 @@ class _MainMapPageState extends State<MainMapPage>
                     Set<Polyline>.of(polylines == null ? [] : polylines!),
               );
             }),
-
-            //Hamburger for drawer
+            
             /// Hanmburger Menu Icon
             Positioned(
               top: 13.0,
@@ -490,47 +473,6 @@ class _MainMapPageState extends State<MainMapPage>
               ),
             ),
 
-            // Search icon
-            // Positioned(
-            //   top: 20.0,
-            //   left: screenWidth * 0.8,
-            //   child: GestureDetector(
-            //     onTap: () {
-            //       Navigator.push(
-            //           context,
-            //           MaterialPageRoute(
-            //             builder: (context) => SearchScreen(),
-            //           ));
-            //     },
-            //     child: Container(
-            //       decoration: BoxDecoration(
-            //           color: Colors.white,
-            //           borderRadius: BorderRadius.circular(22.0),
-            //           // ignore: prefer_const_literals_to_create_immutables
-            //           boxShadow: [
-            //             BoxShadow(
-            //               color: Colors.black,
-            //               blurRadius: 5.0,
-            //               spreadRadius: 0.5,
-            //               offset: Offset(0.1, 0.1),
-            //             )
-            //           ]),
-            //       child: CircleAvatar(
-            //         backgroundColor: Colors.white,
-            //         child: Icon(
-            //           Icons.search,
-            //           color: Colors.black,
-            //         ),
-            //         radius: 20.0,
-            //       ),
-            //     ),
-            //   ),
-            // ),
-
-            // Builder(builder: (context){
-            //   return null;
-            // }),
-
             // display of distances
             Builder(builder: (context) {
               if (detailsShow)
@@ -544,6 +486,7 @@ class _MainMapPageState extends State<MainMapPage>
                         margin: EdgeInsets.all(5),
                         width: 80,
                         height: 50,
+                        // ignore: duplicate_ignore
                         decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(10.0),

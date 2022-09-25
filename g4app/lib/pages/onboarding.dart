@@ -118,12 +118,12 @@ class _OnBoardingState extends State<OnBoarding> {
             margin: const EdgeInsets.all(20),
             width: double.infinity,
             child: ElevatedButton(
-              // child: Text( currentIndex == contents.length -1 ? 'Continue' : "Next"),
-              child: Text('Continue'),
+              child: Text( currentIndex == contents.length -1 ? 'Continue' : "Next"),
+              // child: Text('Continue'),
               onPressed: (){
-                // if (currentIndex == contents.length - 1) {
+                if (currentIndex == contents.length - 1) {
                   Navigator.pushReplacement(context, MaterialPageRoute(builder: (_)=> const Wrapper()));
-                // }
+                }
                 _controller.nextPage(
                   duration: const Duration(milliseconds: 100), 
                   curve: Curves.bounceIn

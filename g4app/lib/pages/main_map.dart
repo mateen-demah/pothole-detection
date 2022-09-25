@@ -339,6 +339,8 @@ class _MainMapPageState extends State<MainMapPage>
 
                           //fetch data from firestore
                           fetchSpecificArea(range.lower, range.upper);
+                          //closing drawer
+                          scaffoldKey.currentState!.closeDrawer();
                           // moving to locations position
                           animateToArea(
                               locations[0].latitude, locations[0].longitude);

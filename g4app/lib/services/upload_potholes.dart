@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:http/http.dart' as http;
 import 'package:sqflite/sqflite.dart';
+import 'package:georange/georange.dart';
 
 import '../pages/data_collection/database.dart';
 import '../tools/constant.dart';
@@ -26,6 +27,8 @@ FutureOr<bool> uploadRegisteredPotholes() async {
       }
 
       for (var element in extractedDataPoints) {
+        final georange = GeoRange();
+        final geohash = georange.encode(element["latitude"] as double, element["longitude"] as double, numberOfChars: 11);
         FirebaseFirestore.instance.collection("Potholes2").add({
           "timestamp": element["timestamp"],
           "count": 5,

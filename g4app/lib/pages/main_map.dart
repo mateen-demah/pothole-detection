@@ -346,7 +346,7 @@ class _MainMapPageState extends State<MainMapPage>
                       color: Colors.green,
                     ),
                     SizedBox(width: 60),
-                    Text("potholes < 10%"),
+                    Text("Good road"),
                   ]),
                 ),
 
@@ -360,7 +360,7 @@ class _MainMapPageState extends State<MainMapPage>
                       color: Colors.yellow,
                     ),
                     SizedBox(width: 60),
-                    Text("potholes < 85%"),
+                    Text("Satisfactory road"),
                   ]),
                 ),
 
@@ -374,7 +374,7 @@ class _MainMapPageState extends State<MainMapPage>
                       color: Colors.red,
                     ),
                     SizedBox(width: 60),
-                    Text("potholes > 85%"),
+                    Text("Bad road"),
                   ]),
                 ),
 

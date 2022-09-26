@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:g4app/pages/data_collection/bg_callback.dart';
-import 'package:location/location.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stats/stats.dart';
@@ -97,21 +97,10 @@ double filter(double value) {
 }
 
 Future<void> gpsLatLong() async {
-  Location location = Location();
-
-  bool serviceEnabled;
-  LocationData locationData;
-
-  serviceEnabled = await location.serviceEnabled();
-  if (!serviceEnabled) {
-    serviceEnabled = await location.requestService();
-    if (!serviceEnabled) {
-      return;
-    }
-  }
-  locationData = await location.getLocation();
-  gpsLat = locationData.latitude;
-  gpsLong = locationData.longitude;
-  speed = locationData.speed;
-  speedAccuracy = locationData.speedAccuracy;
+  await Geolocator.getCurrentPosition().then((value) {
+    gpsLat = value.latitude;
+    gpsLong = value.longitude;
+    speed = value.speed;
+    speedAccuracy = value.speedAccuracy;
+  });
 }

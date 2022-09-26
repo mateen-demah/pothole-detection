@@ -34,68 +34,86 @@ void main() async {
     child: MaterialApp(
       theme: ThemeData(scaffoldBackgroundColor: Colors.white),
       debugShowCheckedModeBanner: false,
-      // home: Scaffold(
-      //     body: Column(
-      //   children: [
-      //     ElevatedButton(
-      //         onPressed: () {
-      //           Workmanager().registerOneOffTask(
-      //             uploadingTaskKey,
-      //             uploadingTaskKey,
-      //             initialDelay: const Duration(seconds: 10),
-      //             constraints: Constraints(
-      //               networkType: NetworkType.connected,
-      //               requiresBatteryNotLow: true,
-      //             ),
-      //             backoffPolicy: BackoffPolicy.linear,
-      //             backoffPolicyDelay: const Duration(minutes: 1),
-      //           );
-      //         },
-      //         child: Text("uploading")),
-      //     ElevatedButton(
-      //         onPressed: () {
-      //           Workmanager().registerOneOffTask(
-      //             predictionTaskKey,
-      //             predictionTaskKey,
-      //             initialDelay: const Duration(seconds: 10),
-      //             constraints: Constraints(
-      //               networkType: NetworkType.not_required,
-      //               requiresBatteryNotLow: true,
-      //               requiresCharging: true,
-      //               requiresDeviceIdle: true,
-      //               requiresStorageNotLow: true,
-      //             ),
-      //             backoffPolicy: BackoffPolicy.linear,
-      //             backoffPolicyDelay: const Duration(minutes: 1),
-      //           );
-      //         },
-      //         child: Text("prediction")),
-      //     ElevatedButton(
-      //         onPressed: () {
-      //           Workmanager().registerPeriodicTask(
-      //             speedMonitorKey,
-      //             speedMonitorKey,
-      //             frequency: const Duration(seconds: 40),
-      //             initialDelay: const Duration(seconds: 10),
-      //             constraints: Constraints(
-      //               networkType: NetworkType.not_required,
-      //               requiresBatteryNotLow: true,
-      //             ),
-      //             backoffPolicy: BackoffPolicy.linear,
-      //             backoffPolicyDelay: const Duration(minutes: 1),
-      //           );
-      //         },
-      //         child: Text("speed monitoring")),
-      //   ],
-      // )),
-      routes: {
-        '/': (context) => splash(),
-        '/login': (context) => login(),
-        '/signup': (context) => signup(),
-        '/notification': (context) => Notifications(),
-        'onboard': (context) => OnBoarding(),
-        'home': (context) => MainMapPage()
-      },
+      home: Scaffold(
+          body: Column(
+        children: [
+          ElevatedButton(
+              onPressed: () {
+                Workmanager()
+                    .registerOneOffTask(uploadingTaskKey, uploadingTaskKey,
+                        initialDelay: const Duration(seconds: 10),
+                        constraints: Constraints(
+                          networkType: NetworkType.connected,
+                          requiresBatteryNotLow: true,
+                        ),
+                        backoffPolicy: BackoffPolicy.linear,
+                        backoffPolicyDelay: const Duration(minutes: 1),
+                        existingWorkPolicy: ExistingWorkPolicy.keep);
+              },
+              child: Text("uploading")),
+          ElevatedButton(
+              onPressed: () {
+                Workmanager()
+                    .registerOneOffTask(predictionTaskKey, predictionTaskKey,
+                        initialDelay: const Duration(seconds: 10),
+                        constraints: Constraints(
+                          networkType: NetworkType.not_required,
+                          requiresBatteryNotLow: true,
+                          requiresCharging: true,
+                          requiresDeviceIdle: true,
+                          requiresStorageNotLow: true,
+                        ),
+                        backoffPolicy: BackoffPolicy.linear,
+                        backoffPolicyDelay: const Duration(minutes: 1),
+                        existingWorkPolicy: ExistingWorkPolicy.keep);
+              },
+              child: Text("prediction")),
+          ElevatedButton(
+              onPressed: () {
+                Workmanager()
+                    .registerPeriodicTask(speedMonitorKey, speedMonitorKey,
+                        frequency: const Duration(seconds: 40),
+                        initialDelay: const Duration(seconds: 10),
+                        constraints: Constraints(
+                          networkType: NetworkType.not_required,
+                          requiresBatteryNotLow: true,
+                        ),
+                        backoffPolicy: BackoffPolicy.linear,
+                        backoffPolicyDelay: const Duration(minutes: 1),
+                        existingWorkPolicy: ExistingWorkPolicy.replace);
+              },
+              child: Text("speed monitoring")),
+          ElevatedButton(
+              onPressed: () {
+                Workmanager().registerOneOffTask(
+                    dataCollectionTaskKey, dataCollectionTaskKey,
+                    initialDelay: const Duration(seconds: 10),
+                    constraints: Constraints(
+                      networkType: NetworkType.connected,
+                      requiresBatteryNotLow: true,
+                    ),
+                    backoffPolicy: BackoffPolicy.linear,
+                    backoffPolicyDelay: const Duration(minutes: 1),
+                    existingWorkPolicy: ExistingWorkPolicy.keep);
+              },
+              child: Text("collect data")),
+          ElevatedButton(
+            onPressed: () async {
+              await Workmanager().cancelAll();
+              print('cancelled');
+            },
+            child: Text('cancel all'),
+          ),
+        ],
+      )),
+      // routes: {
+      //   '/': (context) => splash(),
+      //   '/login': (context) => login(),
+      //   '/signup': (context) => signup(),
+      //   '/notification': (context) => Notifications(),
+      //   'onboard': (context) => OnBoarding(),
+      //   'home': (context) => MainMapPage()
+      // },
     ),
   ));
 }

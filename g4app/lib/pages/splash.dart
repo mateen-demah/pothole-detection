@@ -26,7 +26,7 @@ class _splashState extends State<splash> {
     super.initState();
     wrapperOnboardinit();
     // whereAreWeGoing = wapperfunction
-    registerBackgroundWorkers();
+    // registerBackgroundWorkers();
     Future.delayed(
       const Duration(milliseconds: 3000),
       () {

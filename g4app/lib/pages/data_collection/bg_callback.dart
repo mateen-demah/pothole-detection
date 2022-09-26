@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:geolocator/geolocator.dart';
 import 'package:location/location.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workmanager/workmanager.dart';
@@ -14,22 +15,20 @@ const predictionTaskKey = "kinsaga.g4.predictionTask";
 const uploadingTaskKey = "kinsaga.g4.uploadingTask";
 
 void callbackDispatcher() {
-  print("========= stop 1");
-  print("callback dispatcher");
   Workmanager().executeTask((taskName, inputDta) async {
-    if (taskName != predictionTaskKey) {
-      Location location = Location();
-
-      PermissionStatus permissionGranted;
-
-      permissionGranted = await location.hasPermission();
-      if (permissionGranted == PermissionStatus.denied) {
-        permissionGranted = await location.requestPermission();
-        if (permissionGranted != PermissionStatus.granted) {
-          return Future.error("location permission error");
-        }
+    if ((taskName != predictionTaskKey) || (taskName != uploadingTaskKey)) {
+      final permissionGranted = await Geolocator.checkPermission();
+      final locationServiceEnabled =
+          await Geolocator.isLocationServiceEnabled();
+      if (!locationServiceEnabled ||
+          (permissionGranted != LocationPermission.whileInUse &&
+              permissionGranted != LocationPermission.always)) {
+        print('enabled: $locationServiceEnabled, $permissionGranted');
+        return Future.error(
+            'permission denied or location service not enabled');
       }
     }
+    print('================ another stop');
     var preferences = await SharedPreferences.getInstance();
     switch (taskName) {
       case speedMonitorKey:

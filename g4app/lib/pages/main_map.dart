@@ -310,9 +310,10 @@ class _MainMapPageState extends State<MainMapPage>
                           //Todo:call reverse geocoding
                           List<Location> locations =
                               await locationFromAddress(governmentSearch);
+                              log(locations.toString());
                           //geohash
                           var encoded = georange.encode(
-                              locations[0].latitude, locations[0].longitude);
+                              locations[0].latitude, locations[0].longitude,numberOfChars: 11);
                           log(encoded.toString());
                           //Getting range
                           Range range = georange.geohashRange(

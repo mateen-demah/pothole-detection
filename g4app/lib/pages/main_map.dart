@@ -256,153 +256,160 @@ class _MainMapPageState extends State<MainMapPage>
           width: 255.0,
 
           ///SIDE NAVIGATION PANEL
-          child: Drawer(    
-            child: ListView(
+          child: Drawer(
+            child: Container(
               padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-              children: [
-                SizedBox(
-                  height: 10,
-                ),
-
-                Container(
-                  child: TextField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15.0),
-                        borderSide: BorderSide.none,
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.green),
-                          borderRadius: BorderRadius.circular(15.0)),
-                      filled: true,
-                      suffixIcon: Icon(Icons.search),
-                      hintText: "Area/community",
-                      fillColor: Color.fromARGB(255, 191, 226, 178),
-                    ),
-                    // obscureText: true,
-                    onChanged: (value) {
-                      setState(() {
-                        governmentSearch = value;
-                      });
-                    },
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 10,
                   ),
-                ),
 
-                SizedBox(
-                  height: 20,
-                ),
-
-                Container(
-                  width: 20,
-                  height: 40,
-                  child: Material(
-                    elevation: 2,
-                    child: TextButton(
-                      style: TextButton.styleFrom(
-                        padding: const EdgeInsets.fromLTRB(5, 2, 5, 2),
-                        primary: Colors.black,
-                        backgroundColor: Color.fromARGB(255, 36, 179, 41),
-                        textStyle: const TextStyle(fontSize: 16),
+                  Container(
+                    child: TextField(
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15.0),
+                          borderSide: BorderSide.none,
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.green),
+                            borderRadius: BorderRadius.circular(15.0)),
+                        filled: true,
+                        suffixIcon: Icon(Icons.search),
+                        hintText: "Area/community",
+                        fillColor: Color.fromARGB(255, 191, 226, 178),
                       ),
-                      child: const Text('Search'),
-                      onPressed: () async {
-                        if (governmentSearch != '') {
-                          //Todo:call reverse geocoding
-                          List<Location> locations =
-                              await locationFromAddress(governmentSearch);
-                              log(locations.toString());
-                          //geohash
-                          var encoded = georange.encode(
-                              locations[0].latitude, locations[0].longitude,numberOfChars: 11);
-                          log(encoded.toString());
-                          //Getting range
-                          Range range = georange.geohashRange(
-                              locations[0].latitude, locations[0].longitude,
-                              distance: 5);
-                          log(range.lower.toString());
-                          log(range.upper.toString());
-
-                          //fetch data from firestore
-                          fetchSpecificArea(range.lower, range.upper);
-                          //closing drawer
-                          scaffoldKey.currentState!.closeDrawer();
-                          // moving to locations position
-                          animateToArea(
-                              locations[0].latitude, locations[0].longitude);
-                        }
+                      // obscureText: true,
+                      onChanged: (value) {
+                        setState(() {
+                          governmentSearch = value;
+                        });
                       },
                     ),
                   ),
-                ),
 
-                SizedBox(
-                  height: 20,
-                ),
+                  SizedBox(
+                    height: 20,
+                  ),
 
-                Container(
-                  child: Row(children: [
-                    Container(
-                      width: 50,
-                      height: 10,
-                      color: Colors.green,
+                  Container(
+                    width: double.infinity,
+                    height: 40,
+                    child: Material(
+                      elevation: 2,
+                      child: TextButton(
+                        style: TextButton.styleFrom(
+                          padding: const EdgeInsets.fromLTRB(5, 2, 5, 2),
+                          primary: Colors.black,
+                          backgroundColor: Color.fromARGB(255, 36, 179, 41),
+                          textStyle: const TextStyle(fontSize: 16),
+                        ),
+                        child: const Text('Search'),
+                        onPressed: () async {
+                          if (governmentSearch != '') {
+                            //Todo:call reverse geocoding
+                            List<Location> locations =
+                                await locationFromAddress(governmentSearch);
+                            log(locations.toString());
+                            //geohash
+                            var encoded = georange.encode(
+                                locations[0].latitude, locations[0].longitude,
+                                numberOfChars: 11);
+                            log(encoded.toString());
+                            //Getting range
+                            Range range = georange.geohashRange(
+                                locations[0].latitude, locations[0].longitude,
+                                distance: 5);
+                            log(range.lower.toString());
+                            log(range.upper.toString());
+
+                            //fetch data from firestore
+                            fetchSpecificArea(range.lower, range.upper);
+                            //closing drawer
+                            scaffoldKey.currentState!.closeDrawer();
+                            // moving to locations position
+                            animateToArea(
+                                locations[0].latitude, locations[0].longitude);
+                          }
+                        },
+                      ),
                     ),
-                    SizedBox(width: 60),
-                    Text("Good road"),
-                  ]),
-                ),
+                  ),
 
-                SizedBox(height: 20),
+                  SizedBox(
+                    height: 20,
+                  ),
 
-                Container(
-                  child: Row(children: [
-                    Container(
-                      width: 50,
-                      height: 10,
-                      color: Colors.yellow,
-                    ),
-                    SizedBox(width: 60),
-                    Text("Satisfactory road"),
-                  ]),
-                ),
+                  Container(
+                    child: Row(children: [
+                      Container(
+                        width: 50,
+                        height: 10,
+                        color: Colors.green,
+                      ),
+                      SizedBox(width: 60),
+                      Text("Good road"),
+                    ]),
+                  ),
 
-                SizedBox(height: 20),
+                  SizedBox(height: 20),
 
-                Container(
-                  child: Row(children: [
-                    Container(
-                      width: 50,
-                      height: 10,
+                  Container(
+                    child: Row(children: [
+                      Container(
+                        width: 50,
+                        height: 10,
+                        color: Colors.yellow,
+                      ),
+                      SizedBox(width: 60),
+                      Text("Satisfactory road"),
+                    ]),
+                  ),
+
+                  SizedBox(height: 20),
+
+                  Container(
+                    child: Row(children: [
+                      Container(
+                        width: 50,
+                        height: 10,
+                        color: Colors.red,
+                      ),
+                      SizedBox(width: 60),
+                      Text("Bad road"),
+                    ]),
+                  ),
+
+                  // SizedBox(height: screenHeight * 0.45),
+
+                  // Expanded(child: Container()),
+                  Spacer(),
+
+                  Center(
+                    child: Card(
                       color: Colors.red,
-                    ),
-                    SizedBox(width: 60),
-                    Text("Bad road"),
-                  ]),
-                ),
-
-                SizedBox(height: screenHeight * 0.45),
-
-                Center(
-                  child: Card(
-                    color: Colors.red,
-                    child: ListTile(
-                      onTap: () async {
-                        await _auth.signout().then((value) =>
-                            Navigator.pushReplacementNamed(context, '/login'));
-                        log('logged out');
-                      },
-                      title: Center(
-                        child: Text(
-                          'Sign Out',
-                          style: TextStyle(
-                            fontSize: 15.0,
-                            color: Colors.white,
+                      child: ListTile(
+                        onTap: () async {
+                          await _auth.signout().then((value) =>
+                              Navigator.pushReplacementNamed(
+                                  context, '/login'));
+                          log('logged out');
+                        },
+                        title: Center(
+                          child: Text(
+                            'Sign Out',
+                            style: TextStyle(
+                              fontSize: 15.0,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                )
-              ],
+                  )
+                ],
+              ),
             ),
           ),
         ),
@@ -426,7 +433,7 @@ class _MainMapPageState extends State<MainMapPage>
                     Set<Polyline>.of(polylines == null ? [] : polylines!),
               );
             }),
-            
+
             /// Hanmburger Menu Icon
             Positioned(
               top: 13.0,

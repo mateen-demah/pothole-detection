@@ -120,7 +120,7 @@ class _MainMapPageState extends State<MainMapPage> with TickerProviderStateMixin
                 //Drawer Body
                 GestureDetector(
                   onTap: () {
-                    Navigator.pushNamed(context, MaterialPageRoute(builder: (context) => Notifications() ));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => Notifications() ));
                   },
                   child: ListTile(
                     leading: Icon(Icons.person),

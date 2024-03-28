@@ -378,7 +378,11 @@ class _MainMapPageState extends State<MainMapPage>
                   ]),
                 ),
 
-                SizedBox(height: screenHeight * 0.45),
+                // SizedBox(height: screenHeight * 0.45),
+
+                Expanded(
+                  child: Container()
+                ),
 
                 Center(
                   child: Card(

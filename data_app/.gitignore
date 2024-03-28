@@ -1,5 +1,4 @@
-gradle-wrapper.properties
-gradle.properties# Miscellaneous
+# Miscellaneous
 *.class
 *.log
 *.pyc
@@ -9,6 +8,7 @@ gradle.properties# Miscellaneous
 .buildlog/
 .history
 .svn/
+migrate_working_dir/
 
 # IntelliJ related
 *.iml
